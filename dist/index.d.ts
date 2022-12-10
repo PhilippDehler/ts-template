@@ -1,9 +1,9 @@
 import { templateBuilder } from "./schemaBuilder/templateBuilder";
 import { typeSchemaBuilder } from "./schemaBuilder/typeSchemaBuilder";
 import { infer } from "./utils";
-
-export default {
-  infer,
-  typeSchemaBuilder,
-  templateBuilder,
+declare const _default: {
+    infer: typeof infer;
+    typeSchemaBuilder: typeof typeSchemaBuilder;
+    templateBuilder: typeof templateBuilder;
 };
+export default _default;

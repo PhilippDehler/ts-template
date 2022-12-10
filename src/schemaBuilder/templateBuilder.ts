@@ -1,43 +1,70 @@
 import { createTemplateFn } from "../templateEngine/createTemplateFn";
 import { Narrow } from "../utilityTypes";
-import { parserBuilder } from "./parserBuilder";
+import { operationBuilder, OperationBuilder } from "./operationBuilder";
 import { TypeDefinitions } from "./typeSchemaBuilder";
+
+type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
+  operation: TOperation;
+  add: <TP, Key extends keyof T>(
+    key: Narrow<Key> & string,
+    operationDefinitions: (
+      builder: OperationBuilder<ReturnType<T[Key]["parseValue"]>, T>
+    ) => { build: () => TP }
+  ) => TemplateBuilder<
+    T,
+    TOperation & {
+      [K in Key]: ReturnType<ReturnType<typeof operationDefinitions>["build"]>;
+    }
+  >;
+  build: () => {
+    schema: {
+      typeDefinition: {
+        DEFAULT: ExtractDefault<T>;
+      } & T;
+    } & TOperation;
+    template: ReturnType<
+      typeof createTemplateFn<
+        {
+          typeDefinition: {
+            DEFAULT: ExtractDefault<T>;
+          } & T;
+        } & TOperation
+      >
+    >;
+  };
+};
 
 export function templateBuilder<
   T extends TypeDefinitions,
-  TParser extends {} = {}
->(input: T, parser: TParser) {
-  const self = {
-    parser,
-    add: <TP, Key extends keyof T>(
-      key: Narrow<Key>,
-      parserDefinitions: (
-        builder: ReturnType<
-          typeof parserBuilder<ReturnType<T[Key]["parseValue"]>, T>
-        >
-      ) => { build: () => TP }
-    ) => {
-      const builder = parserBuilder<ReturnType<T[Key]["parseValue"]>, T>(
-        {} as any
-      );
-      const parser = parserDefinitions(builder as any).build();
-      return templateBuilder<T, TParser & { [K in Key]: typeof parser }>(
+  TOperation extends {} = {}
+>(input: T, operation: TOperation): TemplateBuilder<T, TOperation> {
+  const self: TemplateBuilder<T, TOperation> = {
+    operation,
+    add: (key, operationDefinitions) => {
+      const builder = operationBuilder<
+        ReturnType<T[typeof key & string]["parseValue"]>,
+        T
+      >({});
+      const operation = operationDefinitions(builder).build();
+      self.operation = Object.assign(self.operation, {
+        [key]: typeof operation,
+      });
+      return templateBuilder(
         input,
-        Object.assign(self.parser, {
-          [key as string]: parser,
+        Object.assign(self.operation, {
+          [key]: operation,
         }) as any
       );
     },
     build() {
       const defaultType = Object.values(input).find((v) => v.isDefault);
       if (!defaultType) throw new Error("No default type defined");
-
       const schema = {
         typeDefinition: {
           ...input,
           DEFAULT: defaultType as ExtractDefault<typeof input>,
         },
-        ...self.parser,
+        ...self.operation,
       };
       const template = createTemplateFn(schema);
       return {

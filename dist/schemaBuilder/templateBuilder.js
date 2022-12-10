@@ -2,15 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.templateBuilder = void 0;
 const createTemplateFn_1 = require("../templateEngine/createTemplateFn");
-const parserBuilder_1 = require("./parserBuilder");
-function templateBuilder(input, parser) {
+const operationBuilder_1 = require("./operationBuilder");
+function templateBuilder(input, operation) {
     const self = {
-        parser,
-        add: (key, parserDefinitions) => {
-            const builder = (0, parserBuilder_1.parserBuilder)({});
-            const parser = parserDefinitions(builder).build();
-            return templateBuilder(input, Object.assign(self.parser, {
-                [key]: parser,
+        operation,
+        add: (key, operationDefinitions) => {
+            const builder = (0, operationBuilder_1.operationBuilder)({});
+            const operation = operationDefinitions(builder).build();
+            self.operation = Object.assign(self.operation, {
+                [key]: typeof operation,
+            });
+            return templateBuilder(input, Object.assign(self.operation, {
+                [key]: operation,
             }));
         },
         build() {
@@ -22,7 +25,7 @@ function templateBuilder(input, parser) {
                     ...input,
                     DEFAULT: defaultType,
                 },
-                ...self.parser,
+                ...self.operation,
             };
             const template = (0, createTemplateFn_1.createTemplateFn)(schema);
             return {

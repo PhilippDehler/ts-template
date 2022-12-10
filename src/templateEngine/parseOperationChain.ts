@@ -3,7 +3,7 @@ import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
 import { parseArguments } from "./parseArguments";
 import { parseSchemaType } from "./parseSchemaType";
 
-export function parseParserChain<
+export function parseOperationChain<
   Type extends string,
   TSchema extends Schema<{ typeDefinition: TypeDefinitions }>
 >(input: string[], type: Type | null, schema: TSchema) {
@@ -25,7 +25,9 @@ export function parseParserChain<
       operationChainItem.args,
       schema
     );
-    operationChain.push((input: any) => operationChainItem.parser(input, args));
+    operationChain.push((input: any) =>
+      operationChainItem.operation(input, args)
+    );
   }
   return operationChain;
 }

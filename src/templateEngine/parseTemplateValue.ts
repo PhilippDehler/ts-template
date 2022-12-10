@@ -1,6 +1,6 @@
 import { Schema } from "../schemaBuilder/extendableSchema";
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
-import { parseParserChain } from "./parseParserChain";
+import { parseOperationChain } from "./parseOperationChain";
 
 export function parseTemplateValue<
   TSchema extends Schema<{ typeDefinition: TypeDefinitions }>
@@ -10,7 +10,7 @@ export function parseTemplateValue<
   if (!key) throw new Error("Invalid template value: " + k);
   return {
     key: key,
-    operationChain: parseParserChain<string, TSchema>(
+    operationChain: parseOperationChain<string, TSchema>(
       operations,
       type ?? null,
       schema

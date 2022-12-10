@@ -52,10 +52,10 @@ export type ValidateOperationKey<
   ? SuggestionMsg<keyof TOperationLookUp & string & `${Key}${string}`>
   : ErrorMsg<`Didn't expect Operation Key |${Key}|.`>;
 
-interface ExtendableParserDefinition {
+interface ExtendableOperationDefinition {
   key: string;
   args: ArgDefinition[];
-  parser: (input: any, t: any) => any;
+  operation: (input: any, t: any) => any;
 }
 
 type OperationKeyAndArgs<T extends string> =
@@ -81,7 +81,7 @@ export type ValidateOperation<
     >}${HasArgs extends false ? "" : ")"}`
   : never;
 
-type OperationLookUp = Record<string, ExtendableParserDefinition>;
+type OperationLookUp = Record<string, ExtendableOperationDefinition>;
 
 export type ValidateOperations<
   Operation extends string,

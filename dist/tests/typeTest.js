@@ -22,16 +22,46 @@ const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
     .build();
 const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
     .add("string", (b) => b
-    .addParser("slice", (0, utils_1.infer)([
-    { key: "start", type: "number" },
-    { key: "end", type: "number" },
-]), "string", (input, { start, end }) => input.slice(start, end))
-    .addParser("uppercase", [], "string", (input) => input.toUpperCase())
-    .addParser("lowercase", [], "string", (input) => input.toLowerCase()))
+    .addOperation({
+    key: "slice",
+    args: (0, utils_1.infer)([
+        { key: "start", type: "number" },
+        { key: "end", type: "number" },
+    ]),
+    returnType: "string",
+    operation: (input, { start, end }) => input.slice(start, end),
+})
+    .addOperation({
+    key: "uppercase",
+    args: [],
+    returnType: "string",
+    operation: (input) => input.toUpperCase(),
+})
+    .addOperation({
+    key: "lowercase",
+    args: [],
+    returnType: "string",
+    operation: (input) => input.toLowerCase(),
+}))
     .add("number", (b) => b
-    .addParser("square", [], "number", (input) => input * input)
-    .addParser("add", (0, utils_1.infer)([{ key: "addend", type: "number" }]), "number", (input, { addend }) => input + addend))
-    .add("date", (b) => b.addParser("iso", [], "string", (input) => input.toISOString()))
+    .addOperation({
+    key: "square",
+    args: [],
+    returnType: "number",
+    operation: (input) => input * input,
+})
+    .addOperation({
+    key: "add",
+    args: (0, utils_1.infer)([{ key: "addend", type: "number" }]),
+    returnType: "number",
+    operation: (input, { addend }) => input + addend,
+}))
+    .add("date", (b) => b.addOperation({
+    key: "iso",
+    args: [],
+    returnType: "string",
+    operation: (input) => input.toISOString(),
+}))
     .build();
 function test(i) {
     return i;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseTemplateValue = void 0;
-const parseParserChain_1 = require("./parseParserChain");
+const parseOperationChain_1 = require("./parseOperationChain");
 function parseTemplateValue(k, schema) {
     const [def, ...operations] = k.split("|");
     const [key, type] = def?.split("#") ?? [null, null];
@@ -9,7 +9,7 @@ function parseTemplateValue(k, schema) {
         throw new Error("Invalid template value: " + k);
     return {
         key: key,
-        operationChain: (0, parseParserChain_1.parseParserChain)(operations, type ?? null, schema),
+        operationChain: (0, parseOperationChain_1.parseOperationChain)(operations, type ?? null, schema),
     };
 }
 exports.parseTemplateValue = parseTemplateValue;

@@ -37,30 +37,50 @@ const typeSchema = typeSchemaBuilder({})
 const { schema } = templateBuilder(typeSchema, {})
   .add("string", (b) =>
     b
-      .addParser(
-        "slice",
-        infer([
+      .addOperation({
+        key: "slice",
+        args: infer([
           { key: "start", type: "number" },
           { key: "end", type: "number" },
         ]),
-        "string",
-        (input, { start, end }) => input.slice(start, end)
-      )
-      .addParser("uppercase", [], "string", (input) => input.toUpperCase())
-      .addParser("lowercase", [], "string", (input) => input.toLowerCase())
+        returnType: "string",
+        operation: (input, { start, end }) => input.slice(start, end),
+      })
+      .addOperation({
+        key: "uppercase",
+        args: [],
+        returnType: "string",
+        operation: (input) => input.toUpperCase(),
+      })
+      .addOperation({
+        key: "lowercase",
+        args: [],
+        returnType: "string",
+        operation: (input) => input.toLowerCase(),
+      })
   )
   .add("number", (b) =>
     b
-      .addParser("square", [], "number", (input) => input * input)
-      .addParser(
-        "add",
-        infer([{ key: "addend", type: "number" }]),
-        "number",
-        (input, { addend }) => input + addend
-      )
+      .addOperation({
+        key: "square",
+        args: [],
+        returnType: "number",
+        operation: (input) => input * input,
+      })
+      .addOperation({
+        key: "add",
+        args: infer([{ key: "addend", type: "number" }]),
+        returnType: "number",
+        operation: (input, { addend }) => input + addend,
+      })
   )
   .add("date", (b) =>
-    b.addParser("iso", [], "string", (input) => input.toISOString())
+    b.addOperation({
+      key: "iso",
+      args: [],
+      returnType: "string",
+      operation: (input) => input.toISOString(),
+    })
   )
   .build();
 
