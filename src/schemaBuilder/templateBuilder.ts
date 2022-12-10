@@ -1,4 +1,7 @@
-import { createTemplateFn } from "../templateEngine/createTemplateFn";
+import {
+  createTemplateFn,
+  TemplateFn,
+} from "../templateEngine/createTemplateFn";
 import { Narrow } from "../utilityTypes";
 import { operationBuilder, OperationBuilder } from "./operationBuilder";
 import { TypeDefinitions } from "./typeSchemaBuilder";
@@ -22,14 +25,12 @@ type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
         DEFAULT: ExtractDefault<T>;
       } & T;
     } & TOperation;
-    template: ReturnType<
-      typeof createTemplateFn<
-        {
-          typeDefinition: {
-            DEFAULT: ExtractDefault<T>;
-          } & T;
-        } & TOperation
-      >
+    templateFn: TemplateFn<
+      {
+        typeDefinition: {
+          DEFAULT: ExtractDefault<T>;
+        } & T;
+      } & TOperation
     >;
   };
 };
@@ -45,16 +46,13 @@ export function templateBuilder<
         ReturnType<T[typeof key & string]["parseValue"]>,
         T
       >({});
-      const operation = operationDefinitions(builder).build();
-      self.operation = Object.assign(self.operation, {
-        [key]: typeof operation,
-      });
-      return templateBuilder(
-        input,
-        Object.assign(self.operation, {
-          [key]: operation,
-        }) as any
-      );
+      return templateBuilder(input, {
+        ...self.operation,
+        [key]: {
+          ...operationDefinitions(builder).build(),
+          ...(self.operation[key as keyof typeof self.operation] ?? {}),
+        },
+      }) as any;
     },
     build() {
       const defaultType = Object.values(input).find((v) => v.isDefault);
@@ -66,9 +64,10 @@ export function templateBuilder<
         },
         ...self.operation,
       };
-      const template = createTemplateFn(schema);
+      const templateFn: TemplateFn<typeof schema> = (template) =>
+        createTemplateFn(template, schema);
       return {
-        template,
+        templateFn,
         schema,
       };
     },

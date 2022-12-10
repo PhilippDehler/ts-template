@@ -4,10 +4,11 @@ exports.operationBuilder = void 0;
 function operationBuilder(operation) {
     const self = {
         operation,
-        addOperation(definition) {
-            return operationBuilder(Object.assign(self.operation, {
+        addOperation: (definition) => {
+            return operationBuilder({
+                ...self.operation,
                 [definition.key]: definition,
-            }));
+            });
         },
         build() {
             return self.operation;

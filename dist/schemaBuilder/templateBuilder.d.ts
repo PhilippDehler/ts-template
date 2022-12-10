@@ -1,4 +1,4 @@
-import { createTemplateFn } from "../templateEngine/createTemplateFn";
+import { TemplateFn } from "../templateEngine/createTemplateFn";
 import { Narrow } from "../utilityTypes";
 import { OperationBuilder } from "./operationBuilder";
 import { TypeDefinitions } from "./typeSchemaBuilder";
@@ -15,11 +15,11 @@ type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
                 DEFAULT: ExtractDefault<T>;
             } & T;
         } & TOperation;
-        template: ReturnType<typeof createTemplateFn<{
+        templateFn: TemplateFn<{
             typeDefinition: {
                 DEFAULT: ExtractDefault<T>;
             } & T;
-        } & TOperation>>;
+        } & TOperation>;
     };
 };
 export declare function templateBuilder<T extends TypeDefinitions, TOperation extends {} = {}>(input: T, operation: TOperation): TemplateBuilder<T, TOperation>;

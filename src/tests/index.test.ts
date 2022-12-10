@@ -25,7 +25,7 @@ describe("testing index file", () => {
   let testIncrementor = autoIncrement();
   const templateTestMessage = () =>
     `Test templatestring variation ${testIncrementor()}`;
-  const { schema, template } = templateBuilder(typeSchema, {})
+  const { schema, templateFn } = templateBuilder(typeSchema, {})
     .add("string", (b) =>
       b
         .addOperation({
@@ -76,24 +76,24 @@ describe("testing index file", () => {
     .build();
 
   test(templateTestMessage(), () =>
-    expect(template("Hallo {{user}}!")({ user: "Max" })).toBe("Hallo Max!")
+    expect(templateFn("Hallo {{user}}!")({ user: "Max" })).toBe("Hallo Max!")
   );
 
   test(templateTestMessage(), () =>
-    expect(template("Hallo {{user|uppercase}}!")({ user: "Max" })).toBe(
+    expect(templateFn("Hallo {{user|uppercase}}!")({ user: "Max" })).toBe(
       "Hallo MAX!"
     )
   );
 
   test(templateTestMessage(), () =>
     expect(
-      template("Hallo {{user|lowercase|slice(0,1)}}!")({ user: "Max" })
+      templateFn("Hallo {{user|lowercase|slice(0,1)}}!")({ user: "Max" })
     ).toBe("Hallo m!")
   );
 
   test(templateTestMessage(), () =>
     expect(
-      template(
+      templateFn(
         "Happy Birthday, {{user|lowercase|slice(0,1)}}. {{birthday#date|iso}}!"
       )({ user: "Max", birthday: new Date(0) })
     ).toBe("Happy Birthday, m. 1970-01-01T00:00:00.000Z!")

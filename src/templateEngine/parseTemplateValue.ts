@@ -8,8 +8,12 @@ export function parseTemplateValue<
   const [def, ...operations] = k.split("|");
   const [key, type] = def?.split("#") ?? [null, null];
   if (!key) throw new Error("Invalid template value: " + k);
+  const isOptional = key.startsWith("?");
+  const templateKey = isOptional ? key.slice(1) : key;
+
   return {
-    key: key,
+    key: templateKey,
+    isOptional,
     operationChain: parseOperationChain<string, TSchema>(
       operations,
       type ?? null,

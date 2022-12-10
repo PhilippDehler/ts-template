@@ -103,7 +103,7 @@ test("name#string|uppercase|slice(0,1)");
 test("name|lowercase|slice(0,?[Expected Type:number])");
 test("");
 test("Hallo {{name}}");
-test("Hallo {{name|uppercase}}");
+test("Hallo {{?name|uppercase}}");
 test("{{name|uppercase}}");
 test("Hallo {{name|uppercase}}, hast du am {{birthday#date|iso}} Geburtstag?");
 test("Hallo {{name|uppercase}}, hast du am {{birthday#date|iso|uppercase|slice(0,1)}} Geburtstag?");

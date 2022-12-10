@@ -8,13 +8,13 @@ function templateBuilder(input, operation) {
         operation,
         add: (key, operationDefinitions) => {
             const builder = (0, operationBuilder_1.operationBuilder)({});
-            const operation = operationDefinitions(builder).build();
-            self.operation = Object.assign(self.operation, {
-                [key]: typeof operation,
+            return templateBuilder(input, {
+                ...self.operation,
+                [key]: {
+                    ...operationDefinitions(builder).build(),
+                    ...(self.operation[key] ?? {}),
+                },
             });
-            return templateBuilder(input, Object.assign(self.operation, {
-                [key]: operation,
-            }));
         },
         build() {
             const defaultType = Object.values(input).find((v) => v.isDefault);
@@ -27,9 +27,9 @@ function templateBuilder(input, operation) {
                 },
                 ...self.operation,
             };
-            const template = (0, createTemplateFn_1.createTemplateFn)(schema);
+            const templateFn = (template) => (0, createTemplateFn_1.createTemplateFn)(template, schema);
             return {
-                template,
+                templateFn,
                 schema,
             };
         },

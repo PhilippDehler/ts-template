@@ -289,10 +289,10 @@ type TestValidateTemplate1 = ValidateTemplate<"Hallo {{name}}", TestSchema>;
 test<TestValidateTemplate1>("Hallo {{name}}");
 
 type TestValidateTemplate2 = ValidateTemplate<
-  "Hallo {{name|uppercase}}",
+  "Hallo {{?name|uppercase}}",
   TestSchema
 >;
-test<TestValidateTemplate2>("Hallo {{name|uppercase}}");
+test<TestValidateTemplate2>("Hallo {{?name|uppercase}}");
 
 type TestValidateTemplate3 = ValidateTemplate<"{{name|uppercase}}", TestSchema>;
 test<TestValidateTemplate3>("{{name|uppercase}}");

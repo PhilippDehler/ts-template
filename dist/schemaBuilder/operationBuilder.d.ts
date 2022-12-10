@@ -6,7 +6,7 @@ export type OperationBuilder<InputType, T extends TypeDefinitions, TOperation ex
         key: string;
         type: string;
     }[], TReturn extends keyof T>(definition: {
-        key: Narrow<Key>;
+        key: Narrow<Key> & string;
         args: TArgs;
         returnType: Narrow<TReturn>;
         operation: (input: InputType, args: ExtractArgs<TArgs, T>) => ReturnType<T[TReturn]["parseValue"]>;

@@ -25,7 +25,7 @@ describe("testing index file", () => {
         .build();
     let testIncrementor = autoIncrement();
     const templateTestMessage = () => `Test templatestring variation ${testIncrementor()}`;
-    const { schema, template } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
+    const { schema, templateFn } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
         .add("string", (b) => b
         .addOperation({
         key: "slice",
@@ -68,10 +68,10 @@ describe("testing index file", () => {
         operation: (input) => input.toISOString(),
     }))
         .build();
-    test(templateTestMessage(), () => expect(template("Hallo {{user}}!")({ user: "Max" })).toBe("Hallo Max!"));
-    test(templateTestMessage(), () => expect(template("Hallo {{user|uppercase}}!")({ user: "Max" })).toBe("Hallo MAX!"));
-    test(templateTestMessage(), () => expect(template("Hallo {{user|lowercase|slice(0,1)}}!")({ user: "Max" })).toBe("Hallo m!"));
-    test(templateTestMessage(), () => expect(template("Happy Birthday, {{user|lowercase|slice(0,1)}}. {{birthday#date|iso}}!")({ user: "Max", birthday: new Date(0) })).toBe("Happy Birthday, m. 1970-01-01T00:00:00.000Z!"));
+    test(templateTestMessage(), () => expect(templateFn("Hallo {{user}}!")({ user: "Max" })).toBe("Hallo Max!"));
+    test(templateTestMessage(), () => expect(templateFn("Hallo {{user|uppercase}}!")({ user: "Max" })).toBe("Hallo MAX!"));
+    test(templateTestMessage(), () => expect(templateFn("Hallo {{user|lowercase|slice(0,1)}}!")({ user: "Max" })).toBe("Hallo m!"));
+    test(templateTestMessage(), () => expect(templateFn("Happy Birthday, {{user|lowercase|slice(0,1)}}. {{birthday#date|iso}}!")({ user: "Max", birthday: new Date(0) })).toBe("Happy Birthday, m. 1970-01-01T00:00:00.000Z!"));
     testIncrementor = autoIncrement();
     const operationTestMessage = () => `Test operation variation ${testIncrementor()}`;
     test(operationTestMessage(), () => {

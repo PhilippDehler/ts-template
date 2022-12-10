@@ -12,7 +12,7 @@ export type OperationBuilder<
     TArgs extends { key: string; type: string }[],
     TReturn extends keyof T
   >(definition: {
-    key: Narrow<Key>;
+    key: Narrow<Key> & string;
     args: TArgs;
     returnType: Narrow<TReturn>;
     operation: (
@@ -36,12 +36,11 @@ export function operationBuilder<
 >(operation: TOperation): OperationBuilder<Input, T, TOperation> {
   const self: OperationBuilder<Input, T, TOperation> = {
     operation,
-    addOperation(definition) {
-      return operationBuilder(
-        Object.assign(self.operation, {
-          [definition.key as string]: definition,
-        }) as any
-      );
+    addOperation: (definition) => {
+      return operationBuilder({
+        ...self.operation,
+        [definition.key]: definition,
+      } as any);
     },
     build() {
       return self.operation;

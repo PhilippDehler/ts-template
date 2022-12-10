@@ -7,51 +7,71 @@ import {
 import { Narrow } from "../utilityTypes";
 import { parseTemplateValue } from "./parseTemplateValue";
 
-export function createTemplateFn<
+function deriveOperationChain<
+  Template extends string,
   TSchema extends { typeDefinition: TypeDefinitions }
->(schema: TSchema) {
-  /**
-   * @param template The template string
-   * @returns A function that takes the params and returns the string
-   * @example
-   * const template = template("Hallo {{name}}!");
-   * const result = template({name: "Max"});
-   */
-  return function template<Template extends string>(
-    template: Narrow<ValidateTemplate<Template, TSchema>>
-  ) {
-    if (typeof template !== "string")
-      throw new Error("Template is not a string");
-    const matches = template.match(/{{.*?}}/g);
-    //@ts-ignore
-    if (!matches) return (params: Params<Template, TSchema>) => template;
-    const chains = matches.map((m) => {
+>(template: Template, schema: TSchema) {
+  const matches = template.match(/{{.*?}}/g);
+  const chains =
+    matches?.map((m) => {
       const k = m.slice(2, -2);
-      const { key, operationChain } = parseTemplateValue(
+      const { key, operationChain, isOptional } = parseTemplateValue(
         k,
         schema as Schema<TSchema>
       );
       return {
         key,
+        isOptional,
         chain: (replaceValue: any) =>
           operationChain.reduce((v, chain) => chain(v), replaceValue),
       };
-    });
+    }) ?? null;
+  return chains;
+}
 
-    return (params: Params<Template, TSchema>) => {
-      let i = 0;
-      return template.replace(/{{.*?}}/g, () => {
-        const { key, chain } = chains[i++]!;
-        const replaceValue = params[key as keyof typeof params];
-        if (replaceValue === undefined)
-          throw new Error("Key is missing in Translation:" + key);
-        const result = chain(replaceValue);
-        if (typeof result !== "string" && typeof result !== "number")
-          return JSON.stringify(result);
-        return result + "";
-      });
-    };
-  };
+export function createTemplateFn<
+  Template extends string,
+  TSchema extends { typeDefinition: TypeDefinitions }
+>(template: Narrow<ValidateTemplate<Template, TSchema>>, schema: TSchema) {
+  if (typeof template !== "string") throw new Error("Template is not a string");
+  const operationChain = deriveOperationChain(template, schema);
+  //@ts-ignore ignores the unused parameters
+  if (!operationChain) return (params: Params<Template, TSchema>) => template;
+
+  return (params: Params<Template, TSchema>) =>
+    templateReplace<Template, TSchema>(template, params, operationChain);
+}
+export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
+  Template extends string
+>(
+  params: Narrow<ValidateTemplate<Template, TSchema>>
+) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
+
+function templateReplace<
+  Template extends string,
+  TSchema extends { typeDefinition: TypeDefinitions }
+>(
+  template: Narrow<ValidateTemplate<Template, TSchema>> & string,
+  params: Params<Template, TSchema>,
+  operationChain: {
+    key: string;
+    isOptional: boolean;
+    chain: (replaceValue: any) => any;
+  }[]
+) {
+  let i = 0;
+  return template.replace(/{{.*?}}/g, () => {
+    const { key, chain, isOptional } = operationChain[i++]!;
+    const replaceValue = params[key as keyof typeof params];
+    if (replaceValue !== undefined) {
+      const result = chain(replaceValue);
+      if (typeof result !== "string" && typeof result !== "number")
+        return JSON.stringify(result);
+      return result + "";
+    }
+    if (isOptional) return "";
+    throw new Error("Key is missing in Translation:" + key);
+  });
 }
 
 type Params<
@@ -66,12 +86,22 @@ type Params<
       key: infer Key extends string;
       type: infer Type extends string;
     }
-    ? Params<
-        Rest,
-        TSchema,
-        P & {
-          [K in Key]: ReturnType<TSchema["typeDefinition"][Type]["parseValue"]>;
-        }
-      >
-    : Params<Rest, TSchema, P & {}>
+    ? Params<Rest, TSchema, MergeParams<P, Key, Type, TSchema>>
+    : Params<Rest, TSchema, P>
   : P;
+
+type MergeParams<
+  P extends Record<string, any>,
+  Key extends string,
+  Type extends string,
+  TSchema extends { typeDefinition: TypeDefinitions }
+> = (Key extends `?${infer TemplateKey}`
+  ? {
+      [K in TemplateKey]?: ReturnType<
+        TSchema["typeDefinition"][Type]["parseValue"]
+      >;
+    }
+  : {
+      [K in Key]: ReturnType<TSchema["typeDefinition"][Type]["parseValue"]>;
+    }) &
+  P;

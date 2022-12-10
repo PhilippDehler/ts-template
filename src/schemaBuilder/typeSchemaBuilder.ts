@@ -7,43 +7,42 @@ export interface TypeDefinition {
   parseValue: (value: string) => unknown;
 }
 export type TypeDefinitions = Record<string, TypeDefinition>;
-
-export function typeSchemaBuilder<T extends TypeDefinitions>(types: T) {
-  const self = {
-    types,
-    addType<Key extends string, TDefault extends boolean, TReturn>(
-      key: Narrow<Key>,
-      typeDefinition: {
+export type TypeSchemaBuilder<T extends TypeDefinitions> = {
+  types: T;
+  addType: <Key extends string, TDefault extends boolean, TReturn>(
+    key: Narrow<Key> & string,
+    typeDefinition: {
+      isDefault: TDefault;
+      validator: (input: TReturn) => boolean;
+      parseValue: (value: string) => TReturn;
+    }
+  ) => TypeSchemaBuilder<
+    T & {
+      [K in Key]: {
+        key: K & string;
         isDefault: TDefault;
         validator: (input: TReturn) => boolean;
         parseValue: (value: string) => TReturn;
-      }
-    ) {
-      return typeSchemaBuilder<
-        T & {
-          [K in Key]: {
-            key: K & string;
-            isDefault: TDefault;
-            validator: (input: TReturn) => boolean;
-            parseValue: (value: string) => TReturn;
-          };
-        }
-      >(
-        Object.assign(self.types, {
-          [key as string]: { ...typeDefinition, key },
-        }) as T & {
-          [K in Key]: {
-            key: K & string;
-            isDefault: TDefault;
-            validator: (input: TReturn) => boolean;
-            parseValue: (value: string) => TReturn;
-          };
-        }
+      };
+    }
+  >;
+  build: () => T;
+};
+
+export function typeSchemaBuilder<T extends TypeDefinitions>(
+  types: T
+): TypeSchemaBuilder<T> {
+  return {
+    types,
+    addType: (key, typeDefinition) => {
+      return typeSchemaBuilder(
+        Object.assign(types, {
+          [key]: { ...typeDefinition, key },
+        }) as any
       );
     },
     build() {
-      return self.types;
+      return types;
     },
   };
-  return self;
 }
