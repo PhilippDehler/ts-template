@@ -4,7 +4,7 @@ exports.operationBuilder = void 0;
 function operationBuilder(operation) {
     const self = {
         operation,
-        addParser(definition) {
+        addOperation(definition) {
             return operationBuilder(Object.assign(self.operation, {
                 [definition.key]: definition,
             }));

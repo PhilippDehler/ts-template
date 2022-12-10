@@ -9,7 +9,7 @@ export type Schema<
   [K in keyof TSchema["typeDefinition"]]: Record<
     string,
     {
-      parser: AnyFn;
+      operation: AnyFn;
       key: string;
       args: {
         key: string;

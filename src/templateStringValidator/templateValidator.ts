@@ -19,7 +19,7 @@ export type ValidateTemplate<
     >}}}${ValidateTemplate<Rest, TSchema>}`
   : Input;
 
-export type ExtractParserInformations<
+export type ExtractOperationInformations<
   T extends string,
   DefaultType
 > = T extends `${infer Key}#${infer Type}|${infer Operations}`
@@ -59,7 +59,7 @@ export type ValidateTemplateValue<
   TSchema extends {
     typeDefinition: TypeDefinitions;
   }
-> = ExtractParserInformations<
+> = ExtractOperationInformations<
   T,
   TSchema["typeDefinition"]["DEFAULT"]["key"]
 > extends {

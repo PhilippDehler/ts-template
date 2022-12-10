@@ -1,7 +1,7 @@
 import { templateBuilder } from "../schemaBuilder/templateBuilder";
 import { typeSchemaBuilder } from "../schemaBuilder/typeSchemaBuilder";
 import { parseArguments } from "../templateEngine/parseArguments";
-import { parseParserChain } from "../templateEngine/parseParserChain";
+import { parseOperationChain } from "../templateEngine/parseOperationChain";
 import { infer } from "../utils";
 
 describe("testing index file", () => {
@@ -28,30 +28,50 @@ describe("testing index file", () => {
   const { schema, template } = templateBuilder(typeSchema, {})
     .add("string", (b) =>
       b
-        .addParser(
-          "slice",
-          infer([
+        .addOperation({
+          key: "slice",
+          args: infer([
             { key: "start", type: "number" },
             { key: "end", type: "number" },
           ]),
-          "string",
-          (input, { start, end }) => input.slice(start, end)
-        )
-        .addParser("uppercase", [], "string", (input) => input.toUpperCase())
-        .addParser("lowercase", [], "string", (input) => input.toLowerCase())
+          returnType: "string",
+          operation: (input, { start, end }) => input.slice(start, end),
+        })
+        .addOperation({
+          key: "uppercase",
+          args: [],
+          returnType: "string",
+          operation: (input) => input.toUpperCase(),
+        })
+        .addOperation({
+          key: "lowercase",
+          args: [],
+          returnType: "string",
+          operation: (input) => input.toLowerCase(),
+        })
     )
     .add("number", (b) =>
       b
-        .addParser("square", [], "number", (input) => input * input)
-        .addParser(
-          "add",
-          infer([{ key: "addend", type: "number" }]),
-          "number",
-          (input, { addend }) => input + addend
-        )
+        .addOperation({
+          key: "square",
+          args: [],
+          returnType: "number",
+          operation: (input) => input * input,
+        })
+        .addOperation({
+          key: "add",
+          args: infer([{ key: "addend", type: "number" }]),
+          returnType: "number",
+          operation: (input, { addend }) => input + addend,
+        })
     )
     .add("date", (b) =>
-      b.addParser("iso", [], "string", (input) => input.toISOString())
+      b.addOperation({
+        key: "iso",
+        args: [],
+        returnType: "string",
+        operation: (input) => input.toISOString(),
+      })
     )
     .build();
 
@@ -80,8 +100,9 @@ describe("testing index file", () => {
   );
 
   testIncrementor = autoIncrement();
-  const parserTestMessage = () => `Test parser variation ${testIncrementor()}`;
-  test(parserTestMessage(), () => {
+  const operationTestMessage = () =>
+    `Test operation variation ${testIncrementor()}`;
+  test(operationTestMessage(), () => {
     expect(() =>
       parseArguments(
         "as",
@@ -93,7 +114,7 @@ describe("testing index file", () => {
       )
     ).toThrow();
   });
-  test(parserTestMessage(), () => {
+  test(operationTestMessage(), () => {
     expect(() =>
       parseArguments(
         "as(",
@@ -105,7 +126,7 @@ describe("testing index file", () => {
       )
     ).toThrow();
   });
-  test(parserTestMessage(), () => {
+  test(operationTestMessage(), () => {
     expect(() =>
       parseArguments(
         "as()",
@@ -117,7 +138,7 @@ describe("testing index file", () => {
       )
     ).toThrow();
   });
-  test(parserTestMessage(), () => {
+  test(operationTestMessage(), () => {
     expect(() =>
       parseArguments(
         "as(1,)",
@@ -129,7 +150,7 @@ describe("testing index file", () => {
       )
     ).toThrow();
   });
-  test(parserTestMessage(), () => {
+  test(operationTestMessage(), () => {
     expect(
       JSON.stringify(
         parseArguments(
@@ -148,8 +169,8 @@ describe("testing index file", () => {
       })
     );
   });
-  test(parserTestMessage(), () => {
-    expect(parseParserChain([], "string", schema as any).length).toBe(0);
+  test(operationTestMessage(), () => {
+    expect(parseOperationChain([], "string", schema as any).length).toBe(0);
   });
 });
 

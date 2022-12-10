@@ -1,7 +1,7 @@
 import { Schema } from "../schemaBuilder/extendableSchema";
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
 import {
-  ExtractParserInformations,
+  ExtractOperationInformations,
   ValidateTemplate,
 } from "../templateStringValidator/templateValidator";
 import { Narrow } from "../utilityTypes";
@@ -59,7 +59,7 @@ type Params<
   TSchema extends { typeDefinition: TypeDefinitions },
   P extends Record<string, any> = {}
 > = Input extends `${string}{{${infer TemplateKey}}}${infer Rest}`
-  ? ExtractParserInformations<
+  ? ExtractOperationInformations<
       TemplateKey,
       TSchema["typeDefinition"]["DEFAULT"]["key"]
     > extends {
