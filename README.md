@@ -123,10 +123,10 @@ greetUser({ firstName: "Max" }); // returns "Hello, Max "
 greetUser({ firstName: "Max", lastName: "Smith" }); // returns "Hello, Max Smith"
 ```
 
+### Example type
+
 After your `TemplateKey` you can specify a type by append `#` and a valid `SchemaTypeKey`.
 If you don't specify any type the default `SchemaTypeKey` is used ("string" in our examples).
-
-### Example type
 
 ```typescript
 const greetUser = templateFn(
@@ -173,11 +173,11 @@ const greetUser = templateFn(
 greetUser({ firstName: "Max", age: 12 }); // throws an error
 ```
 
+### Examples suggestions:
+
 With `?` you can force the template string validator to suggest a possible operation
 or the type of an arg. If you use the `?` infront of a template key
 it will mark this template key as optional.
-
-### Examples suggestions:
 
 ```typescript
 // Optional parameters
