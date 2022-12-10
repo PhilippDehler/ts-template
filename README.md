@@ -5,6 +5,7 @@ This is a small typesafe template engine written in Typescript.
 ## Setup
 
 ### Create a Type Schema
+
 Create a typeschema for your template engine. You can specify any datatype you want.
 You need to specify at least on default type
 
@@ -28,75 +29,98 @@ const typeSchema = typeSchemaBuilder({})
     parseValue: (value: string) => new Date(value),
   })
   .build();
-
 ```
 
 ### Create your custom template function
-```typescript
 
-import { infer, templateBuilder } from "ts-template"
+```typescript
+import { infer, templateBuilder } from "ts-template";
 
 const { schema, templateFn } = templateBuilder(typeSchema, {})
- // You can add multiple functions to a definied type
   .add("string", (b) =>
     b
-      .addParser(
-        // key of your custom parser
-        "slice",
-        // Argumentdefinition that your parser will receive from the template string
-        // In this version you have to use the helper function infer
-        infer([
-          { key: "start", type: "number" },
-          { key: "end", type: "number" },
-        ]),
-        // define the return type from your parser
-        // all keys of your typeschema are valid here
-        "string",
-        // define youe parser, if everything is setup correctly your all types will be inferred
-        (input, { start, end }) => input.slice(start, end)
+      // You can add multiple functions to a definied type
+      .add("string", (b) =>
+        b
+          .addParser({
+            // key of your custom operation
+            key: "slice",
+            // Argumentdefinition that your operation will receive from the template string
+            // In this version you have to use the helper function infer
+            args: infer([
+              { key: "start", type: "number" },
+              { key: "end", type: "number" },
+            ]),
+            // define the return type from your operation
+            // all keys of your typeschema are valid here
+            returnType: "string",
+            // define youe operation, if everything is setup correctly your all types will be inferred
+            operation: (input, { start, end }) => input.slice(start, end),
+          })
+          .addOperation({
+            key: "uppercase",
+            args: [],
+            returnType: "string",
+            operation: (input) => input.toUpperCase(),
+          })
+          .addOperation({
+            key: "lowercase",
+            args: [],
+            returnType: "string",
+            operation: (input) => input.toLowerCase(),
+          })
       )
-      .addParser("uppercase", [], "string", (input) => input.toUpperCase())
-      .addParser("lowercase", [], "string", (input) => input.toLowerCase())
-  )
-  .add("number", (b) =>
-    b
-      .addParser("square", [], "number", (input) => input * input)
-      .addParser(
-        "add",
-        infer([{ key: "addend", type: "number" }]),
-        "number",
-        (input, { addend }) => input + addend
+      .add("number", (b) =>
+        b
+          .addOperation({
+            key: "square",
+            args: [],
+            returnType: "number",
+            operation: (input) => input * input,
+          })
+          .addOperation({
+            key: "add",
+            args: infer([{ key: "addend", type: "number" }]),
+            returnType: "number",
+            operation: (input, { addend }) => input + addend,
+          })
       )
-  )
-  .add("date", (b) =>
-    b.addParser("iso", [], "string", (input) => input.toISOString())
+      .add("date", (b) =>
+        b.addOperation({
+          key: "iso",
+          args: [],
+          returnType: "string",
+          operation: (input) => input.toISOString(),
+        })
+      )
   )
   // build your template function
   .build();
-
 ```
 
 ## Usage
 
 ```typescript
-
 // We take the templateFn from the previous code block
 // Create a simple template string
 
-const greetUser = templatefn("Hello, {{user}}!")
-greetUser({ user: "Max" })
+const greetUser = templatefn("Hello, {{user}}!");
+greetUser({ user: "Max" });
 
 // specify the type of the variable by append "#<SchemaType>"
 // if you don't specify any type the default type from your TypeSchema is used
-const greetUser1 = templatefn("Hello, {{user|uppercase}}. Today is your {{birthday#date|iso}}!")
-greetUser1({ user: "Max", birthday:new Date() })
+const greetUser1 = templatefn(
+  "Hello, {{user|uppercase}}. Today is your {{birthday#date|iso}}!"
+);
+greetUser1({ user: "Max", birthday: new Date() });
 
-// chain parser to modify the string
+// chain operation to modify the string
 // Parserchaindefinition: |<ParserKey>|<ParserKey>| ... |<ParserKey>
 
-const greetUser2 = templatefn("Hello, {{user}}. Today is your {{birthday#date|iso|slice(0,1)|lowercase}}!")
-greetUser2({ user: "Max" ,birthday:new Date() })
-
+const greetUser2 = templatefn(
+  "Hello, {{user}}. Today is your {{birthday#date|iso|slice(0,1)|lowercase}}!"
+);
+greetUser2({ user: "Max", birthday: new Date() });
 ```
 
 ## String Validation
@@ -105,27 +129,41 @@ It's sometimes unsafe to define a template string with an arbitrary amount of ch
 This library tries to validate your template string and can also suggests valid template strings.
 
 ```typescript
-
-
 type TestValidateTemplate = ValidateTemplate<"", TestSchema>;
 test<TestValidateTemplate>("");
 
 type TestValidateTemplate1 = ValidateTemplate<"Hello {{name}}", TestSchema>;
 test<TestValidateTemplate1>("Hello {{name}}");
 
-type TestValidateTemplate2 = ValidateTemplate<"Hello {{name|uppercase}}",TestSchema>;
+type TestValidateTemplate2 = ValidateTemplate<
+  "Hello {{name|uppercase}}",
+  TestSchema
+>;
 test<TestValidateTemplate2>("Hello {{name|uppercase}}");
 
 type TestValidateTemplate3 = ValidateTemplate<"{{name|uppercase}}", TestSchema>;
 test<TestValidateTemplate3>("{{name|uppercase}}");
 
-type TestValidateTemplate4 = ValidateTemplate<"Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso}}.",TestSchema>;
-test<TestValidateTemplate4>("Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso}}.");
+type TestValidateTemplate4 = ValidateTemplate<
+  "Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso}}.",
+  TestSchema
+>;
+test<TestValidateTemplate4>(
+  "Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso}}."
+);
 
-type TestValidateTemplate5 = ValidateTemplate<"Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso|uppercase|slice(0,1)|}}!", TestSchema>;
-test<TestValidateTemplate5>("Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso|uppercase|slice(0,1)}}!");
+type TestValidateTemplate5 = ValidateTemplate<
+  "Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso|uppercase|slice(0,1)|}}!",
+  TestSchema
+>;
+test<TestValidateTemplate5>(
+  "Hello {{name|uppercase}}, it's your brithday {{birthday#date|iso|uppercase|slice(0,1)}}!"
+);
 
-type TestValidateTemplate6 = ValidateTemplate<"{{birthday#date|uppercase|iso|?}}", TestSchema>;
+type TestValidateTemplate6 = ValidateTemplate<
+  "{{birthday#date|uppercase|iso|?}}",
+  TestSchema
+>;
 test<TestValidateTemplate6>(
   "{{birthday#date|[Error:Didn't expect Operation Key |uppercase|.]|[Error:Didn't expect Operation Key |iso|.]|lowercase}}"
 );
@@ -159,17 +197,8 @@ type TestValidateTemplate10 = ValidateTemplate<
 test<TestValidateTemplate10>(
   "Hallo {{name|slice[Expected Type:number],[Expected Type:number]|slice(0,[Expected Type:number])}}"
 );
-
 ```
 
 ## TODOs
-- refactor naming operations and parser. A parser is an operation. 
-- trim every value in the template keys to prevent bugs 
 
-
-
-
-
-
-
-
+- trim every value in the template keys to prevent bugs
