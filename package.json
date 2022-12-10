@@ -1,6 +1,6 @@
 {
   "name": "template-ts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "author": "Philipp Dehler",
   "license": "MIT",
@@ -18,5 +18,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PhilippDehler/ts-template.git"
   }
 }
