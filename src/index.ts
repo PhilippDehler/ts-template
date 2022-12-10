@@ -1,9 +1,7 @@
-import { templateBuilder } from "./schemaBuilder/templateBuilder";
-import { typeSchemaBuilder } from "./schemaBuilder/typeSchemaBuilder";
-import { infer } from "./utils";
+import { templateBuilder as tB } from "./schemaBuilder/templateBuilder";
+import { typeSchemaBuilder as tSB } from "./schemaBuilder/typeSchemaBuilder";
+import { infer as i } from "./utils";
 
-export default {
-  infer,
-  typeSchemaBuilder,
-  templateBuilder,
-};
+export const infer = i;
+export const templateBuilder = tB;
+export const typeSchemaBuilder = tSB;
