@@ -2,6 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTemplateFn = void 0;
 const parseTemplateValue_1 = require("./parseTemplateValue");
+function createTemplateFn(template, schema) {
+    if (typeof template !== "string")
+        throw new Error("Template is not a string");
+    const operationChain = deriveOperationChain(template, schema);
+    //@ts-ignore ignores the unused parameters
+    if (!operationChain)
+        return (params) => template;
+    return (params) => templateReplace(template, params, operationChain);
+}
+exports.createTemplateFn = createTemplateFn;
 function deriveOperationChain(template, schema) {
     const matches = template.match(/{{.*?}}/g);
     const chains = matches?.map((m) => {
@@ -15,16 +25,6 @@ function deriveOperationChain(template, schema) {
     }) ?? null;
     return chains;
 }
-function createTemplateFn(template, schema) {
-    if (typeof template !== "string")
-        throw new Error("Template is not a string");
-    const operationChain = deriveOperationChain(template, schema);
-    //@ts-ignore ignores the unused parameters
-    if (!operationChain)
-        return (params) => template;
-    return (params) => templateReplace(template, params, operationChain);
-}
-exports.createTemplateFn = createTemplateFn;
 function templateReplace(template, params, operationChain) {
     let i = 0;
     return template.replace(/{{.*?}}/g, () => {

@@ -22,5 +22,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/PhilippDehler/ts-template.git"
-  }
+  },
+  "keywords": [
+    "typescript",
+    "template",
+    "template engine"
+  ]
 }

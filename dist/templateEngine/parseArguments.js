@@ -16,6 +16,7 @@ function parseArguments(operationTemplateString, argsDefinition, schema) {
         if (!type)
             throw new Error("Invalid type: " + definition.type);
         const parsedValue = type.parseValue(argString);
+        console.log(parsedValue);
         if (!type.validator(parsedValue))
             throw new Error("Invalid value: " + argString + " for type: " + definition.type + "");
         res.push({

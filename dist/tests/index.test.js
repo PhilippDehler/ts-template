@@ -5,22 +5,22 @@ const typeSchemaBuilder_1 = require("../schemaBuilder/typeSchemaBuilder");
 const parseArguments_1 = require("../templateEngine/parseArguments");
 const parseOperationChain_1 = require("../templateEngine/parseOperationChain");
 const utils_1 = require("../utils");
-describe("testing index file", () => {
+describe("testing template engine", () => {
     const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
         .addType("string", {
         isDefault: true,
-        validator: (input) => typeof input === "string",
         parseValue: (value) => value,
+        validator: (input) => typeof input === "string",
     })
         .addType("number", {
         isDefault: false,
-        validator: (input) => typeof input === "number",
         parseValue: (value) => Number(value),
+        validator: (input) => typeof input === "number" && !isNaN(input),
     })
         .addType("date", {
         isDefault: false,
-        validator: (input) => input instanceof Date,
         parseValue: (value) => new Date(value),
+        validator: (input) => input instanceof Date && !isNaN(input.getTime()),
     })
         .build();
     let testIncrementor = autoIncrement();
@@ -72,6 +72,14 @@ describe("testing index file", () => {
     test(templateTestMessage(), () => expect(templateFn("Hallo {{user|uppercase}}!")({ user: "Max" })).toBe("Hallo MAX!"));
     test(templateTestMessage(), () => expect(templateFn("Hallo {{user|lowercase|slice(0,1)}}!")({ user: "Max" })).toBe("Hallo m!"));
     test(templateTestMessage(), () => expect(templateFn("Happy Birthday, {{user|lowercase|slice(0,1)}}. {{birthday#date|iso}}!")({ user: "Max", birthday: new Date(0) })).toBe("Happy Birthday, m. 1970-01-01T00:00:00.000Z!"));
+    test(templateTestMessage(), () => expect(() => templateFn("Happy Birthday, {{user|lowercase|slice(0,abc)}}. {{birthday#date|iso}}!")({ user: "Max", birthday: new Date(0) })).toThrow());
+    test(templateTestMessage(), () => expect(templateFn("Happy Birthday, {{?firstname|uppercase}} {{lastName}}!")({
+        firstname: "Max",
+        lastName: "Smith",
+    })).toBe("Happy Birthday, MAX Smith!"));
+    test(templateTestMessage(), () => expect(templateFn("Happy Birthday, {{?firstname|uppercase}} {{lastName}}!")({
+        lastName: "Smith",
+    })).toBe("Happy Birthday,  Smith!"));
     testIncrementor = autoIncrement();
     const operationTestMessage = () => `Test operation variation ${testIncrementor()}`;
     test(operationTestMessage(), () => {

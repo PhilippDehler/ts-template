@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.infer = exports.test = void 0;
-function test(input) {
-    input;
-}
-exports.test = test;
+exports.infer = void 0;
 function infer(i) {
     return i;
 }

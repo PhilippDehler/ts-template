@@ -7,6 +7,19 @@ import {
 import { Narrow } from "../utilityTypes";
 import { parseTemplateValue } from "./parseTemplateValue";
 
+export function createTemplateFn<
+  Template extends string,
+  TSchema extends { typeDefinition: TypeDefinitions }
+>(template: Narrow<ValidateTemplate<Template, TSchema>>, schema: TSchema) {
+  if (typeof template !== "string") throw new Error("Template is not a string");
+  const operationChain = deriveOperationChain(template, schema);
+  //@ts-ignore ignores the unused parameters
+  if (!operationChain) return (params: Params<Template, TSchema>) => template;
+
+  return (params: Params<Template, TSchema>) =>
+    templateReplace<Template, TSchema>(template, params, operationChain);
+}
+
 function deriveOperationChain<
   Template extends string,
   TSchema extends { typeDefinition: TypeDefinitions }
@@ -28,24 +41,6 @@ function deriveOperationChain<
     }) ?? null;
   return chains;
 }
-
-export function createTemplateFn<
-  Template extends string,
-  TSchema extends { typeDefinition: TypeDefinitions }
->(template: Narrow<ValidateTemplate<Template, TSchema>>, schema: TSchema) {
-  if (typeof template !== "string") throw new Error("Template is not a string");
-  const operationChain = deriveOperationChain(template, schema);
-  //@ts-ignore ignores the unused parameters
-  if (!operationChain) return (params: Params<Template, TSchema>) => template;
-
-  return (params: Params<Template, TSchema>) =>
-    templateReplace<Template, TSchema>(template, params, operationChain);
-}
-export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
-  Template extends string
->(
-  params: Narrow<ValidateTemplate<Template, TSchema>>
-) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
 
 function templateReplace<
   Template extends string,
@@ -73,6 +68,12 @@ function templateReplace<
     throw new Error("Key is missing in Translation:" + key);
   });
 }
+
+export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
+  Template extends string
+>(
+  params: Narrow<ValidateTemplate<Template, TSchema>>
+) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
 
 type Params<
   Input extends string,

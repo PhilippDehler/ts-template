@@ -153,7 +153,7 @@ const greetUser = templateFn(
 greetUser({ firstName: "Max", age: 2 }); // Error
 ```
 
-### Example operation args
+### Example operation arguments
 
 If you specified any args in your template builder you can assign these arguments like this:
 
@@ -162,7 +162,15 @@ const greetUser = templateFn(
   "Hello, {{firstName}}. You are {{age#number|add(2)}} years old."
 );
 greetUser({ firstName: "Max", age: 12 }); // returns "Hello, Max. You are 14 years old."
-// The arguments are also validated. If you specified one argument. You HAVE to use it
+// The existance of arguments is also validated. If you specified one argument. You HAVE to use it
+
+// All arguments are parsed by your parsedValue fn and  validated by your validator fn.
+// If the validator return false the engine will throw an error
+// The template string validator can't validate the value of an argument for now.
+const greetUser = templateFn(
+  "Hello, {{firstName}}. You are {{age#number|add(something that is not a number)}} years old."
+);
+greetUser({ firstName: "Max", age: 12 }); // throws an error
 ```
 
 With `?` you can force the template string validator to suggest a possible operation
