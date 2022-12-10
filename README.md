@@ -1,4 +1,4 @@
-# ts-template
+# template-ts
 
 This is a small typesafe template engine written in Typescript.
 
@@ -10,7 +10,7 @@ Create a typeschema for your template engine. You can specify any datatype you w
 You need to specify at least on default type
 
 ```typescript
-import { typeSchemaBuilder } from "ts-template";
+import { typeSchemaBuilder } from "template-ts";
 
 const typeSchema = typeSchemaBuilder({})
   .addType("string", {
@@ -34,7 +34,7 @@ const typeSchema = typeSchemaBuilder({})
 ### Create your custom template function
 
 ```typescript
-import { infer, templateBuilder } from "ts-template";
+import { infer, templateBuilder } from "template-ts";
 
 const { schema, templateFn } = templateBuilder(typeSchema, {})
   .add("string", (b) =>
