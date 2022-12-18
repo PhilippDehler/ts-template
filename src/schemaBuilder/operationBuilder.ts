@@ -8,11 +8,11 @@ export type OperationBuilder<
 > = {
   operation: TOperation;
   addOperation: <
-    Key extends string,
+    OperationKey extends string,
     TArgs extends { key: string; type: string }[],
     TReturn extends keyof T
   >(definition: {
-    key: Narrow<Key> & string;
+    key: Narrow<OperationKey> & string;
     args: TArgs;
     returnType: Narrow<TReturn>;
     operation: (
@@ -23,7 +23,15 @@ export type OperationBuilder<
     InputType,
     T,
     TOperation & {
-      [K in Key]: typeof definition;
+      [K in OperationKey]: {
+        key: OperationKey;
+        args: TArgs;
+        returnType: TReturn;
+        operation: (
+          input: InputType,
+          args: ExtractArgs<TArgs, T>
+        ) => ReturnType<T[TReturn]["parseValue"]>;
+      };
     }
   >;
   build: () => TOperation;
@@ -33,7 +41,7 @@ export function operationBuilder<
   Input,
   T extends TypeDefinitions,
   TOperation extends {} = {}
->(operation: TOperation): OperationBuilder<Input, T, TOperation> {
+>(operation: TOperation) {
   const self: OperationBuilder<Input, T, TOperation> = {
     operation,
     addOperation: (definition) => {

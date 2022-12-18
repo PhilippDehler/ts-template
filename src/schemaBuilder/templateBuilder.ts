@@ -16,7 +16,7 @@ type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
   ) => TemplateBuilder<
     T,
     TOperation & {
-      [K in Key]: ReturnType<ReturnType<typeof operationDefinitions>["build"]>;
+      [K in Key]: TP;
     }
   >;
   build: () => {
