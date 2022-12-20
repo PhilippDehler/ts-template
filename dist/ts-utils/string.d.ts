@@ -41,7 +41,7 @@ export type HasExactMatch<I extends string, B extends string> = [I] extends [B] 
  * type T2 = "fizzz"
  * type Result2 = AutoComplete<T, KeyLookUp>; // Maybe<never,"fizzBuzz">|Maybe<never,"buzz">|Maybe<never,"foo">
  * */
-export type AutoComplete<T extends string, KeyLookUp extends Record<string, any>> = If<HasPartialMatch<T, StringKeys<KeyLookUp>>, Maybe<If<HasExactMatch<T, StringKeys<KeyLookUp>>, T>, SuggestionMsg<StringKeys<KeyLookUp> & `${T}${string}`>>, Maybe<never, SuggestionMsg<StringKeys<KeyLookUp>>>>;
+export type AutoComplete<T extends string, KeyLookUp extends Record<string, any>> = If<HasPartialMatch<T, StringKeys<KeyLookUp>>, Maybe<If<HasExactMatch<T, StringKeys<KeyLookUp>>, T, SuggestionMsg<StringKeys<KeyLookUp> & `${T}${string}`>>>, Maybe<never, SuggestionMsg<StringKeys<KeyLookUp>>>>;
 export type Split<T extends string, TSplit extends string, TAgg extends string[] = []> = T extends `${infer First}${TSplit}${infer Rest}` ? Split<Rest, TSplit, [...TAgg, First]> : [...TAgg, T];
 export type IsEmptyString<T> = T extends "" ? true : false;
 export type IsNoneEmptyString<T extends string> = Not<IsEmptyString<T>>;

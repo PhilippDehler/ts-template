@@ -11,12 +11,10 @@ describe("testing template engine", () => {
       validator: (input) => typeof input === "string",
     })
     .addType("number", {
-      isDefault: false,
       parseValue: (value) => Number(value),
       validator: (input) => typeof input === "number" && !isNaN(input),
     })
     .addType("date", {
-      isDefault: false,
       parseValue: (value) => new Date(value),
       validator: (input) => input instanceof Date && !isNaN(input.getTime()),
     })
@@ -33,19 +31,16 @@ describe("testing template engine", () => {
             { key: "start", type: "number" },
             { key: "end", type: "number" },
           ],
-          returnType: "string",
           operation: (input, { start, end }) => input.slice(start, end),
         })
         .addOperation({
           key: "uppercase",
           args: [],
-          returnType: "string",
           operation: (input) => input.toUpperCase(),
         })
         .addOperation({
           key: "lowercase",
           args: [],
-          returnType: "string",
           operation: (input) => input.toLowerCase(),
         })
     )
@@ -68,7 +63,6 @@ describe("testing template engine", () => {
       b.addOperation({
         key: "iso",
         args: [],
-        returnType: "string",
         operation: (input) => input.toISOString(),
       })
     )
@@ -121,7 +115,6 @@ describe("testing template engine", () => {
       })
     ).toBe("Happy Birthday,  Smith!")
   );
-
   testIncrementor = autoIncrement();
   const operationTestMessage = () =>
     `Test operation variation ${testIncrementor()}`;

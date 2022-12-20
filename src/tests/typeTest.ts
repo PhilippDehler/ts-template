@@ -15,6 +15,7 @@ import {
   ValidateTemplateValue,
 } from "../templateStringValidator/templateValidator";
 import { AutoComplete, Split } from "../ts-utils/string";
+import { infer } from "../utils";
 
 const typeSchema = typeSchemaBuilder({})
   .addType("string", {
@@ -23,39 +24,34 @@ const typeSchema = typeSchemaBuilder({})
     parseValue: (value: string) => value,
   })
   .addType("number", {
-    isDefault: false,
     validator: (input: number) => typeof input === "number",
     parseValue: (value: string) => Number(value),
   })
   .addType("date", {
-    isDefault: false,
     validator: (input: Date) => input instanceof Date,
     parseValue: (value: string) => new Date(value),
   })
   .build();
 
-const { schema } = templateBuilder(typeSchema, {})
+const { schema } = templateBuilder(typeSchema, {}, 1)
   .add("string", (b) =>
     b
       .addOperation({
         key: "slice",
-        args: [
+        args: infer([
           { key: "start", type: "number" },
           { key: "end", type: "number" },
-        ],
-        returnType: "string",
+        ]),
         operation: (input, { start, end }) => input.slice(start, end),
       })
       .addOperation({
         key: "uppercase",
         args: [],
-        returnType: "string",
         operation: (input) => input.toUpperCase(),
       })
       .addOperation({
         key: "lowercase",
         args: [],
-        returnType: "string",
         operation: (input) => input.toLowerCase(),
       })
   )
@@ -69,7 +65,7 @@ const { schema } = templateBuilder(typeSchema, {})
       })
       .addOperation({
         key: "add",
-        args: [{ key: "addend", type: "number" }],
+        args: infer([{ key: "addend", type: "number" }]),
         returnType: "number",
         operation: (input, { addend }) => input + addend,
       })
@@ -78,7 +74,6 @@ const { schema } = templateBuilder(typeSchema, {})
     b.addOperation({
       key: "iso",
       args: [],
-      returnType: "string",
       operation: (input) => input.toISOString(),
     })
   )
@@ -123,6 +118,12 @@ test<RebuildTemplateString<TestValidateOperations2>>(
   "iso|uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])"
 );
 
+type TestValidateOperations2_0 =
+  `iso|uppercase|slice([Error:Expected Type:${string}],[Error:Expected Type:number])` extends RebuildTemplateString<TestValidateOperations2>
+    ? "valid"
+    : "invalid";
+const testValidateOperations2_0: TestValidateOperations2_0 = "invalid";
+testValidateOperations2_0;
 type TestValidateOperations3 = ValidateOperations<
   Split<"iso|uppercase|slice(?,)|?", "|">,
   Omit<TestSchema, "DEFAULT">,

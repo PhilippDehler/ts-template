@@ -35,32 +35,32 @@ declare const schema: {
         slice: {
             key: "slice";
             args: [{
-                key: string;
-                type: string;
+                key: "start";
+                type: "number";
             }, {
-                key: string;
-                type: string;
+                key: "end";
+                type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "date";
             operation: (input: string, args: {
-                [x: string]: any;
+                start: number;
             } & {
-                [x: string]: any;
-            }) => string;
+                end: number;
+            }) => string | number | Date;
         };
     } & {
         uppercase: {
             key: "uppercase";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "date";
+            operation: (input: string, args: {}) => string | number | Date;
         };
     } & {
         lowercase: {
             key: "lowercase";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "date";
+            operation: (input: string, args: {}) => string | number | Date;
         };
     };
 } & {
@@ -75,12 +75,12 @@ declare const schema: {
         add: {
             key: "add";
             args: [{
-                key: string;
-                type: string;
+                key: "addend";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                addend: number;
             }) => number;
         };
     };
@@ -89,8 +89,8 @@ declare const schema: {
         iso: {
             key: "iso";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "date";
+            operation: (input: Date, args: {}) => string | number | Date;
         };
     };
 };

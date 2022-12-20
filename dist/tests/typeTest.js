@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const templateBuilder_1 = require("../schemaBuilder/templateBuilder");
 const typeSchemaBuilder_1 = require("../schemaBuilder/typeSchemaBuilder");
+const utils_1 = require("../utils");
 const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
     .addType("string", {
     isDefault: true,
@@ -9,37 +10,32 @@ const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
     parseValue: (value) => value,
 })
     .addType("number", {
-    isDefault: false,
     validator: (input) => typeof input === "number",
     parseValue: (value) => Number(value),
 })
     .addType("date", {
-    isDefault: false,
     validator: (input) => input instanceof Date,
     parseValue: (value) => new Date(value),
 })
     .build();
-const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
+const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {}, 1)
     .add("string", (b) => b
     .addOperation({
     key: "slice",
-    args: [
+    args: (0, utils_1.infer)([
         { key: "start", type: "number" },
         { key: "end", type: "number" },
-    ],
-    returnType: "string",
+    ]),
     operation: (input, { start, end }) => input.slice(start, end),
 })
     .addOperation({
     key: "uppercase",
     args: [],
-    returnType: "string",
     operation: (input) => input.toUpperCase(),
 })
     .addOperation({
     key: "lowercase",
     args: [],
-    returnType: "string",
     operation: (input) => input.toLowerCase(),
 }))
     .add("number", (b) => b
@@ -51,14 +47,13 @@ const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
 })
     .addOperation({
     key: "add",
-    args: [{ key: "addend", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "addend", type: "number" }]),
     returnType: "number",
     operation: (input, { addend }) => input + addend,
 }))
     .add("date", (b) => b.addOperation({
     key: "iso",
     args: [],
-    returnType: "string",
     operation: (input) => input.toISOString(),
 }))
     .build();
@@ -69,6 +64,8 @@ test("slice(0,1)|uppercase");
 test("iso|slice(0,[Error:Expected Type:number])");
 test("uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])");
 test("iso|uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])");
+const testValidateOperations2_0 = "invalid";
+testValidateOperations2_0;
 test("iso|uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])|lowercase");
 test("iso|uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])|uppercase");
 test("iso|uppercase|slice([Error:Expected Type:number],[Error:Expected Type:number])|slice");

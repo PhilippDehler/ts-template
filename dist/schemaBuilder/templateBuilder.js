@@ -3,23 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.templateBuilder = void 0;
 const createTemplateFn_1 = require("../templateEngine/createTemplateFn");
 const operationBuilder_1 = require("./operationBuilder");
-function templateBuilder(input, operation) {
+const typeSchemaBuilder_1 = require("./typeSchemaBuilder");
+function templateBuilder(input, operation, verbose) {
+    const typeDefaultKey = (0, typeSchemaBuilder_1.getTypeSchemaDefaultKey)(input);
     const self = {
         operation,
         add: (key, operationDefinitions) => {
-            const builder = (0, operationBuilder_1.operationBuilder)({});
+            const schemaKey = (0, typeSchemaBuilder_1.castSchemaKey)(key, input);
+            const builder = (0, operationBuilder_1.operationBuilder)({}, typeDefaultKey);
+            const builtOperations = operationDefinitions(builder).build();
             return templateBuilder(input, {
                 ...self.operation,
                 [key]: {
-                    ...operationDefinitions(builder).build(),
-                    ...(self.operation[key] ?? {}),
+                    ...builtOperations,
+                    ...(self.operation[schemaKey] ?? {}),
                 },
-            });
+            }, verbose);
         },
         build() {
-            const defaultType = Object.values(input).find((v) => v.isDefault);
-            if (!defaultType)
-                throw new Error("No default type defined");
+            const defaultType = (0, typeSchemaBuilder_1.getTypeSchemaDefault)(input);
             const schema = {
                 typeDefinition: {
                     ...input,

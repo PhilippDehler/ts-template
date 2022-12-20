@@ -1,16 +1,16 @@
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
-import { RebuildTemplateString } from "../templateStringValidator/rebuildTemplateString";
-import { ExtractOperationInformations, ValidateTemplate } from "../templateStringValidator/templateValidator";
+import { RebuildTemplateString, VerbosityLevel } from "../templateStringValidator/rebuildTemplateString";
+import { ExtractOperationInformations, Val, ValidateTemplate } from "../templateStringValidator/templateValidator";
 import { Narrow } from "../ts-utils/narrow";
 type TemplateString<Template extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
-}> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>;
+}, Verbose extends VerbosityLevel> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>, Verbose>>;
 export type TemplateFn<TSchema extends {
     typeDefinition: TypeDefinitions;
-}> = <Template extends string>(template: Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
+}, Verbose extends VerbosityLevel> = <Template extends Validated, Validated = Val<Narrow<Template> & string, TSchema, Verbose>>(template: Narrow<Template>) => ReturnType<typeof createTemplateFn<Template & string, TSchema, Verbose>>;
 export declare function createTemplateFn<Template extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
-}>(template: TemplateString<Template, TSchema>, schema: TSchema): (params: Params<Template, TSchema>) => string;
+}, Verbose extends VerbosityLevel>(template: TemplateString<Template, TSchema, Verbose>, schema: TSchema): (params: Params<Template, TSchema>) => string;
 type Params<Input extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
 }, P extends Record<string, any> = {}> = Input extends `${string}{{${infer TemplateKey}}}${infer Rest}` ? ExtractOperationInformations<TemplateKey, TSchema["typeDefinition"]["DEFAULT"]["key"]> extends {

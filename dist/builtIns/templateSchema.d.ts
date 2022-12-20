@@ -155,12 +155,12 @@ export declare const builtInTemplateSchema: {
         repeat: {
             key: "repeat";
             args: [{
-                key: string;
-                type: string;
+                key: "count";
+                type: "number";
             }];
             returnType: "string";
             operation: (input: string, args: {
-                [x: string]: any;
+                count: number;
             }) => string;
         };
     } & {
@@ -311,36 +311,36 @@ export declare const builtInTemplateSchema: {
         toLocaleDateString: {
             key: "toLocaleDateString";
             args: [{
-                key: string;
-                type: string;
+                key: "locales";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                locales: string;
             }) => string;
         };
     } & {
         toLocaleString: {
             key: "toLocaleString";
             args: [{
-                key: string;
-                type: string;
+                key: "locales";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                locales: string;
             }) => string;
         };
     } & {
         toLocaleTimeString: {
             key: "toLocaleTimeString";
             args: [{
-                key: string;
-                type: string;
+                key: "locales";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                locales: string;
             }) => string;
         };
     } & {
@@ -494,48 +494,48 @@ export declare const builtInTemplateSchema: {
         mmddyyyy: {
             key: "mmddyyyy";
             args: [{
-                key: string;
-                type: string;
+                key: "separator";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                separator: string;
             }) => string;
         };
     } & {
         ddmmyyyy: {
             key: "ddmmyyyy";
             args: [{
-                key: string;
-                type: string;
+                key: "separator";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                separator: string;
             }) => string;
         };
     } & {
         ddyyyymm: {
             key: "ddyyyymm";
             args: [{
-                key: string;
-                type: string;
+                key: "separator";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                separator: string;
             }) => string;
         };
     } & {
         yyyyddmm: {
             key: "yyyyddmm";
             args: [{
-                key: string;
-                type: string;
+                key: "separator";
+                type: "string";
             }];
             returnType: "string";
             operation: (input: Date, args: {
-                [x: string]: any;
+                separator: string;
             }) => string;
         };
     };
@@ -544,48 +544,48 @@ export declare const builtInTemplateSchema: {
         toExponential: {
             key: "toExponential";
             args: [{
-                key: string;
-                type: string;
+                key: "fractionDigits";
+                type: "number";
             }];
             returnType: "string";
             operation: (input: number, args: {
-                [x: string]: any;
+                fractionDigits: number;
             }) => string;
         };
     } & {
         toFixed: {
             key: "toFixed";
             args: [{
-                key: string;
-                type: string;
+                key: "fractionDigits";
+                type: "number";
             }];
             returnType: "string";
             operation: (input: number, args: {
-                [x: string]: any;
+                fractionDigits: number;
             }) => string;
         };
     } & {
         toPrecision: {
             key: "toPrecision";
             args: [{
-                key: string;
-                type: string;
+                key: "precision";
+                type: "number";
             }];
             returnType: "string";
             operation: (input: number, args: {
-                [x: string]: any;
+                precision: number;
             }) => string;
         };
     } & {
         toString: {
             key: "toString";
             args: [{
-                key: string;
-                type: string;
+                key: "radix";
+                type: "number";
             }];
             returnType: "string";
             operation: (input: number, args: {
-                [x: string]: any;
+                radix: number;
             }) => string;
         };
     } & {
@@ -599,84 +599,84 @@ export declare const builtInTemplateSchema: {
         add: {
             key: "add";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         subtract: {
             key: "subtract";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         multiply: {
             key: "multiply";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         divide: {
             key: "divide";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         root: {
             key: "root";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         power: {
             key: "power";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         log: {
             key: "log";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
@@ -760,12 +760,12 @@ export declare const builtInTemplateSchema: {
         atan2: {
             key: "atan2";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
@@ -814,12 +814,12 @@ export declare const builtInTemplateSchema: {
         hypot: {
             key: "hypot";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
@@ -868,12 +868,12 @@ export declare const builtInTemplateSchema: {
         imul: {
             key: "imul";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
@@ -908,36 +908,36 @@ export declare const builtInTemplateSchema: {
         max: {
             key: "max";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         min: {
             key: "min";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
         hypot: {
             key: "hypot";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "number";
             }];
             returnType: "number";
             operation: (input: number, args: {
-                [x: string]: any;
+                value: number;
             }) => number;
         };
     } & {
@@ -967,96 +967,96 @@ export declare const builtInTemplateSchema: {
         and: {
             key: "and";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         or: {
             key: "or";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         xor: {
             key: "xor";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         nand: {
             key: "nand";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         nor: {
             key: "nor";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         xnor: {
             key: "xnor";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         equals: {
             key: "equals";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     } & {
         notEquals: {
             key: "notEquals";
             args: [{
-                key: string;
-                type: string;
+                key: "value";
+                type: "boolean";
             }];
             returnType: "boolean";
             operation: (input: boolean, args: {
-                [x: string]: any;
+                value: boolean;
             }) => boolean;
         };
     };

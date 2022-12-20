@@ -8,6 +8,7 @@ import {
 import { AutoComplete, IsNoneEmptyString, Split } from "../ts-utils/string";
 import { If } from "../ts-utils/utilityTypes";
 import { ValidateOperations } from "./operationValidator";
+import { RebuildTemplateString, VerbosityLevel } from "./rebuildTemplateString";
 
 type ValidateKey<Key extends string> = Maybe<
   If<IsNoneEmptyString<Key>, Key>,
@@ -91,6 +92,14 @@ export type ValidateTemplateValue<
         ErrorMsg<"ValidateTemplateValue couldn't extract all necessarry operation infromation">
       >
     ];
+
+export type Val<
+  Input extends string,
+  TSchema extends {
+    typeDefinition: TypeDefinitions;
+  },
+  Verbose extends VerbosityLevel
+> = RebuildTemplateString<ValidateTemplate<Input, TSchema>, Verbose>;
 
 export type ValidateTemplate<
   Input extends string,

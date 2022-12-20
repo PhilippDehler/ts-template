@@ -1,35 +1,27 @@
 import { TemplateFn } from "../templateEngine/createTemplateFn";
+import { VerbosityLevel } from "../templateStringValidator/rebuildTemplateString";
 import { Narrow } from "../ts-utils/narrow";
-import { OperationBuilder } from "./operationBuilder";
-import { TypeDefinitions } from "./typeSchemaBuilder";
-type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
+import { OperationBuilder, OperationDefinition } from "./operationBuilder";
+import { ExtractDefaultType, TypeDefinitions } from "./typeSchemaBuilder";
+type TemplateBuilder<T extends TypeDefinitions, TOperation extends Record<string, OperationDefinition>, Verbose extends VerbosityLevel> = {
     operation: TOperation;
-    add: <TP, Key extends keyof T>(key: Narrow<Key> & string, operationDefinitions: (builder: OperationBuilder<ReturnType<T[Key]["parseValue"]>, T, ExtractDefault<T>["key"]>) => {
-        build: () => TP;
+    add: <TOperationBuilderReturn, TypeKey extends keyof T>(key: Narrow<TypeKey> & string, operationDefinitions: (builder: OperationBuilder<ReturnType<T[TypeKey]["parseValue"]>, T, ExtractDefaultType<T>["key"]>) => {
+        build: () => TOperationBuilderReturn;
     }) => TemplateBuilder<T, TOperation & {
-        [K in Key]: TP;
-    }>;
+        [K in Narrow<TypeKey> & string]: TOperationBuilderReturn;
+    }, Verbose>;
     build: () => {
         schema: {
             typeDefinition: {
-                DEFAULT: ExtractDefault<T>;
+                DEFAULT: ExtractDefaultType<T>;
             } & T;
         } & TOperation;
         templateFn: TemplateFn<{
             typeDefinition: {
-                DEFAULT: ExtractDefault<T>;
+                DEFAULT: ExtractDefaultType<T>;
             } & T;
-        } & TOperation>;
+        } & TOperation, Verbose>;
     };
 };
-export declare function templateBuilder<T extends TypeDefinitions, TOperation extends {} = {}>(input: T, operation: TOperation): TemplateBuilder<T, TOperation>;
-type ExtractDefault<T extends Record<string, {
-    isDefault: boolean;
-    validator: (input: unknown) => boolean;
-    parseValue: (value: string) => unknown;
-}>> = {
-    [K in keyof T]: T[K]["isDefault"] extends true ? T[K] & {
-        key: K;
-    } : never;
-}[keyof T];
+export declare function templateBuilder<TypeSchema extends TypeDefinitions, Verbose extends VerbosityLevel = 3, TOperation extends Record<string, OperationDefinition> = {}>(input: TypeSchema, operation: TOperation, verbose?: Verbose): TemplateBuilder<TypeSchema, TOperation, Verbose>;
 export {};

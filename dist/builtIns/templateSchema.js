@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.builtInTemplateSchema = void 0;
 const templateBuilder_1 = require("../schemaBuilder/templateBuilder");
+const utils_1 = require("../utils");
 const types_1 = require("./types");
 exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.builtInTypes, {})
     .add("string", (_) => _.addOperation({
@@ -75,7 +76,7 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "repeat",
-    args: [{ key: "count", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "count", type: "number" }]),
     returnType: "string",
     operation: (_, { count }) => _.repeat(count),
 })
@@ -191,19 +192,19 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "toLocaleDateString",
-    args: [{ key: "locales", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
     returnType: "string",
     operation: (_, { locales }) => _.toLocaleDateString(locales),
 })
     .addOperation({
     key: "toLocaleString",
-    args: [{ key: "locales", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
     returnType: "string",
     operation: (_, { locales }) => _.toLocaleString(locales),
 })
     .addOperation({
     key: "toLocaleTimeString",
-    args: [{ key: "locales", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
     returnType: "string",
     operation: (_, { locales }) => _.toLocaleTimeString(locales),
 })
@@ -335,49 +336,49 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "mmddyyyy",
-    args: [{ key: "separator", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
     returnType: "string",
     operation: (_, { separator }) => `${_.getMonth() + 1}${separator}${_.getDate()}${separator}${_.getFullYear()}`,
 })
     .addOperation({
     key: "ddmmyyyy",
-    args: [{ key: "separator", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
     returnType: "string",
     operation: (_, { separator }) => `${_.getDate()}${separator}${_.getMonth() + 1}${separator}${_.getFullYear()}`,
 })
     .addOperation({
     key: "ddyyyymm",
-    args: [{ key: "separator", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
     returnType: "string",
     operation: (_, { separator }) => `${_.getDate()}${separator}${_.getFullYear()}${separator}${_.getMonth() + 1}`,
 })
     .addOperation({
     key: "yyyyddmm",
-    args: [{ key: "separator", type: "string" }],
+    args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
     returnType: "string",
     operation: (_, { separator }) => `${_.getFullYear()}${separator}${_.getDate()}${separator}${_.getMonth() + 1}`,
 }))
     .add("number", (_) => _.addOperation({
     key: "toExponential",
-    args: [{ key: "fractionDigits", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "fractionDigits", type: "number" }]),
     returnType: "string",
     operation: (_, { fractionDigits }) => _.toExponential(fractionDigits),
 })
     .addOperation({
     key: "toFixed",
-    args: [{ key: "fractionDigits", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "fractionDigits", type: "number" }]),
     returnType: "string",
     operation: (_, { fractionDigits }) => _.toFixed(fractionDigits),
 })
     .addOperation({
     key: "toPrecision",
-    args: [{ key: "precision", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "precision", type: "number" }]),
     returnType: "string",
     operation: (_, { precision }) => _.toPrecision(precision),
 })
     .addOperation({
     key: "toString",
-    args: [{ key: "radix", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "radix", type: "number" }]),
     returnType: "string",
     operation: (_, { radix }) => _.toString(radix),
 })
@@ -389,43 +390,43 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "add",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => _ + value,
 })
     .addOperation({
     key: "subtract",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => _ + value,
 })
     .addOperation({
     key: "multiply",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => _ + value,
 })
     .addOperation({
     key: "divide",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => _ + value,
 })
     .addOperation({
     key: "root",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.pow(_, 1 / value),
 })
     .addOperation({
     key: "power",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.pow(_, value),
 })
     .addOperation({
     key: "log",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.log(value) / Math.log(_),
 })
@@ -497,7 +498,7 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "atan2",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.atan2(_, value),
 })
@@ -539,7 +540,7 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "hypot",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.hypot(_, value),
 })
@@ -581,7 +582,7 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "imul",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.imul(_, value),
 })
@@ -611,19 +612,19 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "max",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.max(_, value),
 })
     .addOperation({
     key: "min",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.min(_, value),
 })
     .addOperation({
     key: "hypot",
-    args: [{ key: "value", type: "number" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "number" }]),
     returnType: "number",
     operation: (_, { value }) => Math.hypot(_, value),
 })
@@ -647,49 +648,49 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
 })
     .addOperation({
     key: "and",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ && value,
 })
     .addOperation({
     key: "or",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ || value,
 })
     .addOperation({
     key: "xor",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ !== value,
 })
     .addOperation({
     key: "nand",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => !(_ && value),
 })
     .addOperation({
     key: "nor",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => !(_ || value),
 })
     .addOperation({
     key: "xnor",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ === value,
 })
     .addOperation({
     key: "equals",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ === value,
 })
     .addOperation({
     key: "notEquals",
-    args: [{ key: "value", type: "boolean" }],
+    args: (0, utils_1.infer)([{ key: "value", type: "boolean" }]),
     returnType: "boolean",
     operation: (_, { value }) => _ !== value,
 }))

@@ -1,8 +1,12 @@
 import { Schema } from "../schemaBuilder/extendableSchema";
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
-import { RebuildTemplateString } from "../templateStringValidator/rebuildTemplateString";
+import {
+  RebuildTemplateString,
+  VerbosityLevel,
+} from "../templateStringValidator/rebuildTemplateString";
 import {
   ExtractOperationInformations,
+  Val,
   ValidateTemplate,
 } from "../templateStringValidator/templateValidator";
 import { Narrow } from "../ts-utils/narrow";
@@ -10,20 +14,26 @@ import { parseTemplateValue } from "./parseTemplateValue";
 
 type TemplateString<
   Template extends string,
-  TSchema extends { typeDefinition: TypeDefinitions }
-> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>;
+  TSchema extends { typeDefinition: TypeDefinitions },
+  Verbose extends VerbosityLevel
+> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>, Verbose>>;
 
-export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
-  Template extends string
+export type TemplateFn<
+  TSchema extends { typeDefinition: TypeDefinitions },
+  Verbose extends VerbosityLevel
+> = <
+  Template extends Validated,
+  Validated = Val<Narrow<Template> & string, TSchema, Verbose>
 >(
-  template: Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>
-) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
+  template: Narrow<Template>
+) => ReturnType<typeof createTemplateFn<Template & string, TSchema, Verbose>>;
 
 export function createTemplateFn<
   Template extends string,
-  TSchema extends { typeDefinition: TypeDefinitions }
+  TSchema extends { typeDefinition: TypeDefinitions },
+  Verbose extends VerbosityLevel
 >(
-  template: TemplateString<Template, TSchema>,
+  template: TemplateString<Template, TSchema, Verbose>,
   schema: TSchema
 ): (params: Params<Template, TSchema>) => string {
   if (typeof template !== "string") throw new Error("Template is not a string");
@@ -57,9 +67,10 @@ function deriveOperationChain<
 
 function templateReplace<
   TSchema extends { typeDefinition: TypeDefinitions },
-  Template extends string
+  Template extends string,
+  Verbose extends VerbosityLevel
 >(
-  template: TemplateString<Template, TSchema> & string,
+  template: TemplateString<Template, TSchema, Verbose> & string,
   params: Params<Template, TSchema>,
   operationChain: {
     key: string;

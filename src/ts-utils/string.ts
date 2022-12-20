@@ -58,8 +58,11 @@ export type AutoComplete<
 > = If<
   HasPartialMatch<T, StringKeys<KeyLookUp>>,
   Maybe<
-    If<HasExactMatch<T, StringKeys<KeyLookUp>>, T>,
-    SuggestionMsg<StringKeys<KeyLookUp> & `${T}${string}`>
+    If<
+      HasExactMatch<T, StringKeys<KeyLookUp>>,
+      T,
+      SuggestionMsg<StringKeys<KeyLookUp> & `${T}${string}`>
+    >
   >,
   Maybe<never, SuggestionMsg<StringKeys<KeyLookUp>>>
 >;

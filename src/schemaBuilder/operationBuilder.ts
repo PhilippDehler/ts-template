@@ -2,6 +2,13 @@ import { ArgDefinition } from "../templateStringValidator/argsValidator";
 import { Narrow } from "../ts-utils/narrow";
 import { TypeDefinitions } from "./typeSchemaBuilder";
 
+export interface OperationDefinition {
+  args: ArgDefinition[];
+  returnType: string;
+  operation: (input: string, args: any) => string;
+  key: string;
+}
+
 type WithReturnTypeDefault<
   T extends string,
   Default extends string
@@ -51,18 +58,23 @@ export type OperationBuilder<
 };
 
 export function operationBuilder<
-  Input,
-  T extends TypeDefinitions,
+  Input extends keyof TypeSchema,
+  TypeSchema extends TypeDefinitions,
   TypeDefault extends keyof TypeDefinitions,
-  TOperation extends {} = {}
->(operation: TOperation) {
-  const self: OperationBuilder<Input, T, TypeDefault, TOperation> = {
+  TOperation extends Record<string, OperationDefinition> = {}
+>(operation: TOperation, typeDefault: TypeDefault) {
+  const self: OperationBuilder<Input, TypeSchema, TypeDefault, TOperation> = {
     operation,
-    addOperation: (definition) => {
-      return operationBuilder({
+    addOperation: ({ returnType, ...definition }) => {
+      const operationDefinition = {
+        ...definition,
+        returnType: returnType ?? typeDefault,
+      };
+      const operationDefinitions: any = {
         ...self.operation,
-        [definition.key]: definition,
-      } as any);
+        [definition.key]: operationDefinition,
+      };
+      return operationBuilder(operationDefinitions, typeDefault);
     },
     build() {
       return self.operation;

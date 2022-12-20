@@ -63,3 +63,41 @@ export function typeSchemaBuilder<T extends TypeDefinitions>(
     },
   };
 }
+export type ExtractDefaultType<
+  T extends Record<
+    string,
+    {
+      isDefault: boolean;
+      validator: (input: unknown) => boolean;
+      parseValue: (value: string) => unknown;
+    }
+  >
+> = {
+  [K in keyof T]: T[K]["isDefault"] extends true ? T[K] & { key: K } : never;
+}[keyof T];
+
+export function getTypeSchemaDefault<TypeSchema extends TypeDefinitions>(
+  typeSchema: TypeSchema
+): ExtractDefaultType<TypeSchema> {
+  const typeDefault = Object.values(typeSchema).find((v) => v.isDefault);
+  if (!typeDefault) throw new Error("No default type defined");
+  return typeDefault as ExtractDefaultType<TypeSchema>;
+}
+
+export function getTypeSchemaDefaultKey<TypeSchema extends TypeDefinitions>(
+  typeSchema: TypeSchema
+): ExtractDefaultType<TypeSchema>["key"] & keyof TypeSchema & string {
+  const typeDefault = getTypeSchemaDefault(typeSchema);
+  if (Object.keys(typeSchema).includes(typeDefault.key)) return typeDefault.key;
+  throw new Error(
+    `Default type key ${typeDefault.key} not found in type schema`
+  );
+}
+
+export function castSchemaKey<TypeSchema extends TypeDefinitions>(
+  key: string,
+  typeSchema: TypeSchema
+): keyof TypeSchema & string {
+  if (Object.keys(typeSchema).includes(key)) return key;
+  throw new Error(`Key ${key} not found in type schema`);
+}

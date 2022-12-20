@@ -1,14 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.operationBuilder = void 0;
-function operationBuilder(operation) {
+function operationBuilder(operation, typeDefault) {
     const self = {
         operation,
-        addOperation: (definition) => {
-            return operationBuilder({
+        addOperation: ({ returnType, ...definition }) => {
+            const operationDefinition = {
+                ...definition,
+                returnType: returnType ?? typeDefault,
+            };
+            const operationDefinitions = {
                 ...self.operation,
-                [definition.key]: definition,
-            });
+                [definition.key]: operationDefinition,
+            };
+            return operationBuilder(operationDefinitions, typeDefault);
         },
         build() {
             return self.operation;

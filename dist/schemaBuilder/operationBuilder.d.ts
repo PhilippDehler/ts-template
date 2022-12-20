@@ -1,6 +1,12 @@
 import { ArgDefinition } from "../templateStringValidator/argsValidator";
 import { Narrow } from "../ts-utils/narrow";
 import { TypeDefinitions } from "./typeSchemaBuilder";
+export interface OperationDefinition {
+    args: ArgDefinition[];
+    returnType: string;
+    operation: (input: string, args: any) => string;
+    key: string;
+}
 type WithReturnTypeDefault<T extends string, Default extends string> = IsInferredString<T> extends true ? T : Default;
 type IsInferredString<T extends string> = string extends T ? false : T extends string ? true : false;
 export type OperationBuilder<InputType, T extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends {} = {}> = {
@@ -20,7 +26,7 @@ export type OperationBuilder<InputType, T extends TypeDefinitions, TypeDefault e
     }>;
     build: () => TOperation;
 };
-export declare function operationBuilder<Input, T extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends {} = {}>(operation: TOperation): OperationBuilder<Input, T, TypeDefault, TOperation>;
+export declare function operationBuilder<Input extends keyof TypeSchema, TypeSchema extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends Record<string, OperationDefinition> = {}>(operation: TOperation, typeDefault: TypeDefault): OperationBuilder<Input, TypeSchema, TypeDefault, TOperation>;
 type ExtractArgs<T, X extends Record<string, {
     isDefault: boolean;
     validator: (input: unknown) => boolean;
