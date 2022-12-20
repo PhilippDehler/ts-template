@@ -6,10 +6,9 @@ function createTemplateFn(template, schema) {
     if (typeof template !== "string")
         throw new Error("Template is not a string");
     const operationChain = deriveOperationChain(template, schema);
-    //@ts-ignore ignores the unused parameters
     if (!operationChain)
-        return (params) => template;
-    return (params) => templateReplace(template, params, operationChain);
+        return () => template;
+    return (params) => templateReplace(template, params, operationChain, schema);
 }
 exports.createTemplateFn = createTemplateFn;
 function deriveOperationChain(template, schema) {
@@ -25,7 +24,9 @@ function deriveOperationChain(template, schema) {
     }) ?? null;
     return chains;
 }
-function templateReplace(template, params, operationChain) {
+function templateReplace(template, params, operationChain, 
+// @ts-expect-error
+schema) {
     let i = 0;
     return template.replace(/{{.*?}}/g, () => {
         const { key, chain, isOptional } = operationChain[i++];

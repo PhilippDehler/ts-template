@@ -1,23 +1,18 @@
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
-import { ErrorMsg } from "../utilityTypes";
+import {
+  ErrorMsg,
+  ExtendableMaybe,
+  FromMaybe,
+  Maybe,
+} from "../ts-utils/domain";
+import { AutoComplete, IsNoneEmptyString, Split } from "../ts-utils/string";
+import { If } from "../ts-utils/utilityTypes";
 import { ValidateOperations } from "./operationValidator";
-import { ValidateType } from "./typeValidator";
 
-type ValidateKey<Key extends string> = Key extends ""
-  ? ErrorMsg<"Expected non-empty-value">
-  : Key;
-
-export type ValidateTemplate<
-  Input extends string,
-  TSchema extends {
-    typeDefinition: TypeDefinitions;
-  }
-> = Input extends `${infer Start}{{${infer TemplateKey}}}${infer Rest}`
-  ? `${Start}{{${ValidateTemplateValue<
-      TemplateKey,
-      TSchema
-    >}}}${ValidateTemplate<Rest, TSchema>}`
-  : Input;
+type ValidateKey<Key extends string> = Maybe<
+  If<IsNoneEmptyString<Key>, Key>,
+  ErrorMsg<"Expected non-empty-value">
+>;
 
 export type ExtractOperationInformations<
   T extends string,
@@ -66,16 +61,53 @@ export type ValidateTemplateValue<
   key: infer Key extends string;
   type: infer Type extends string;
   operations: infer Operations extends string;
-  hasType: infer HasType;
-  hasOperations: infer HasOperations;
+  hasType: infer HasType extends boolean;
+  hasOperations: infer HasOperations extends boolean;
 }
-  ? `${ValidateKey<Key>}${HasType extends true
-      ? `#${ValidateType<Type, TSchema["typeDefinition"]>}`
-      : ""}${HasOperations extends true
-      ? `|${ValidateOperations<
-          Operations,
-          TSchema,
-          ValidateType<Type, TSchema["typeDefinition"]>
-        >}`
-      : ""}`
-  : never;
+  ? [
+      ValidateKey<Key>,
+      ...If<
+        HasType,
+        [Maybe<"#">, AutoComplete<Type, TSchema["typeDefinition"]>],
+        []
+      >,
+      ...If<
+        HasOperations,
+        [
+          Maybe<"|">,
+          ...ValidateOperations<
+            Split<Operations, "|">,
+            TSchema,
+            FromMaybe<AutoComplete<Type, TSchema["typeDefinition"]>> &
+              keyof TSchema
+          >
+        ],
+        []
+      >
+    ]
+  : [
+      Maybe<
+        never,
+        ErrorMsg<"ValidateTemplateValue couldn't extract all necessarry operation infromation">
+      >
+    ];
+
+export type ValidateTemplate<
+  Input extends string,
+  TSchema extends {
+    typeDefinition: TypeDefinitions;
+  },
+  Agg extends ExtendableMaybe[] = []
+> = Input extends `${infer Start}{{${infer TemplateKey}}}${infer Rest}`
+  ? ValidateTemplate<
+      Rest,
+      TSchema,
+      [
+        ...Agg,
+        Maybe<Start>,
+        Maybe<"{{">,
+        ...ValidateTemplateValue<TemplateKey, TSchema>,
+        Maybe<"}}">
+      ]
+    >
+  : [...Agg, Maybe<Input>];

@@ -2,7 +2,7 @@ import {
   createTemplateFn,
   TemplateFn,
 } from "../templateEngine/createTemplateFn";
-import { Narrow } from "../utilityTypes";
+import { Narrow } from "../ts-utils/narrow";
 import { operationBuilder, OperationBuilder } from "./operationBuilder";
 import { TypeDefinitions } from "./typeSchemaBuilder";
 

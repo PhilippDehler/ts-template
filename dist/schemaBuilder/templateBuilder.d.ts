@@ -1,5 +1,5 @@
 import { TemplateFn } from "../templateEngine/createTemplateFn";
-import { Narrow } from "../utilityTypes";
+import { Narrow } from "../ts-utils/narrow";
 import { OperationBuilder } from "./operationBuilder";
 import { TypeDefinitions } from "./typeSchemaBuilder";
 type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
@@ -7,7 +7,7 @@ type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
     add: <TP, Key extends keyof T>(key: Narrow<Key> & string, operationDefinitions: (builder: OperationBuilder<ReturnType<T[Key]["parseValue"]>, T>) => {
         build: () => TP;
     }) => TemplateBuilder<T, TOperation & {
-        [K in Key]: ReturnType<ReturnType<typeof operationDefinitions>["build"]>;
+        [K in Key]: TP;
     }>;
     build: () => {
         schema: {

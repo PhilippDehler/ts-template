@@ -1,23 +1,36 @@
 import { Schema } from "../schemaBuilder/extendableSchema";
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
+import { RebuildTemplateString } from "../templateStringValidator/rebuildTemplateString";
 import {
   ExtractOperationInformations,
   ValidateTemplate,
 } from "../templateStringValidator/templateValidator";
-import { Narrow } from "../utilityTypes";
+import { Narrow } from "../ts-utils/narrow";
 import { parseTemplateValue } from "./parseTemplateValue";
+
+type TemplateString<
+  Template extends string,
+  TSchema extends { typeDefinition: TypeDefinitions }
+> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>;
+
+export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
+  Template extends string
+>(
+  template: Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>
+) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
 
 export function createTemplateFn<
   Template extends string,
   TSchema extends { typeDefinition: TypeDefinitions }
->(template: Narrow<ValidateTemplate<Template, TSchema>>, schema: TSchema) {
+>(
+  template: TemplateString<Template, TSchema>,
+  schema: TSchema
+): (params: Params<Template, TSchema>) => string {
   if (typeof template !== "string") throw new Error("Template is not a string");
   const operationChain = deriveOperationChain(template, schema);
-  //@ts-ignore ignores the unused parameters
-  if (!operationChain) return (params: Params<Template, TSchema>) => template;
+  if (!operationChain) return () => template;
 
-  return (params: Params<Template, TSchema>) =>
-    templateReplace<Template, TSchema>(template, params, operationChain);
+  return (params) => templateReplace(template, params, operationChain, schema);
 }
 
 function deriveOperationChain<
@@ -43,16 +56,18 @@ function deriveOperationChain<
 }
 
 function templateReplace<
-  Template extends string,
-  TSchema extends { typeDefinition: TypeDefinitions }
+  TSchema extends { typeDefinition: TypeDefinitions },
+  Template extends string
 >(
-  template: Narrow<ValidateTemplate<Template, TSchema>> & string,
+  template: TemplateString<Template, TSchema> & string,
   params: Params<Template, TSchema>,
   operationChain: {
     key: string;
     isOptional: boolean;
     chain: (replaceValue: any) => any;
-  }[]
+  }[],
+  // @ts-expect-error
+  schema: TSchema
 ) {
   let i = 0;
   return template.replace(/{{.*?}}/g, () => {
@@ -68,12 +83,6 @@ function templateReplace<
     throw new Error("Key is missing in Translation:" + key);
   });
 }
-
-export type TemplateFn<TSchema extends { typeDefinition: TypeDefinitions }> = <
-  Template extends string
->(
-  params: Narrow<ValidateTemplate<Template, TSchema>>
-) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
 
 type Params<
   Input extends string,

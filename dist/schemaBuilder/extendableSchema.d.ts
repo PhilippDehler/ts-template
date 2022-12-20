@@ -1,5 +1,5 @@
-import { AnyFn } from "../utilityTypes";
 import { TypeDefinitions } from "./typeSchemaBuilder";
+type AnyFn = (...args: any[]) => any;
 export type Schema<TSchema extends {
     typeDefinition: TypeDefinitions;
 }> = TSchema & {
@@ -13,3 +13,4 @@ export type Schema<TSchema extends {
         returnType: string;
     }>;
 };
+export {};

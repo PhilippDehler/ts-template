@@ -1,12 +1,16 @@
 import { TypeDefinitions } from "../schemaBuilder/typeSchemaBuilder";
+import { RebuildTemplateString } from "../templateStringValidator/rebuildTemplateString";
 import { ExtractOperationInformations, ValidateTemplate } from "../templateStringValidator/templateValidator";
-import { Narrow } from "../utilityTypes";
-export declare function createTemplateFn<Template extends string, TSchema extends {
+import { Narrow } from "../ts-utils/narrow";
+type TemplateString<Template extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
-}>(template: Narrow<ValidateTemplate<Template, TSchema>>, schema: TSchema): (params: Params<Template, TSchema>) => string;
+}> = Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>;
 export type TemplateFn<TSchema extends {
     typeDefinition: TypeDefinitions;
-}> = <Template extends string>(params: Narrow<ValidateTemplate<Template, TSchema>>) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
+}> = <Template extends string>(template: Narrow<RebuildTemplateString<ValidateTemplate<Template, TSchema>>>) => ReturnType<typeof createTemplateFn<Template, TSchema>>;
+export declare function createTemplateFn<Template extends string, TSchema extends {
+    typeDefinition: TypeDefinitions;
+}>(template: TemplateString<Template, TSchema>, schema: TSchema): (params: Params<Template, TSchema>) => string;
 type Params<Input extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
 }, P extends Record<string, any> = {}> = Input extends `${string}{{${infer TemplateKey}}}${infer Rest}` ? ExtractOperationInformations<TemplateKey, TSchema["typeDefinition"]["DEFAULT"]["key"]> extends {

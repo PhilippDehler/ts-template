@@ -1,4 +1,4 @@
-import { Narrow } from "../utilityTypes";
+import { Narrow } from "../ts-utils/narrow";
 
 export interface TypeDefinition {
   key: string;

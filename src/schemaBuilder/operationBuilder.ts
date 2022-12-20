@@ -1,4 +1,4 @@
-import { Narrow } from "../utilityTypes";
+import { Narrow } from "../ts-utils/narrow";
 import { TypeDefinitions } from "./typeSchemaBuilder";
 
 export type OperationBuilder<
