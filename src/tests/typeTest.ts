@@ -15,7 +15,6 @@ import {
   ValidateTemplateValue,
 } from "../templateStringValidator/templateValidator";
 import { AutoComplete, Split } from "../ts-utils/string";
-import { infer } from "../utils";
 
 const typeSchema = typeSchemaBuilder({})
   .addType("string", {
@@ -40,10 +39,10 @@ const { schema } = templateBuilder(typeSchema, {})
     b
       .addOperation({
         key: "slice",
-        args: infer([
+        args: [
           { key: "start", type: "number" },
           { key: "end", type: "number" },
-        ]),
+        ],
         returnType: "string",
         operation: (input, { start, end }) => input.slice(start, end),
       })
@@ -70,7 +69,7 @@ const { schema } = templateBuilder(typeSchema, {})
       })
       .addOperation({
         key: "add",
-        args: infer([{ key: "addend", type: "number" }]),
+        args: [{ key: "addend", type: "number" }],
         returnType: "number",
         operation: (input, { addend }) => input + addend,
       })

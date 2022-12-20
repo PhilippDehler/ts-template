@@ -2,7 +2,6 @@ import { templateBuilder } from "../schemaBuilder/templateBuilder";
 import { typeSchemaBuilder } from "../schemaBuilder/typeSchemaBuilder";
 import { parseArguments } from "../templateEngine/parseArguments";
 import { parseOperationChain } from "../templateEngine/parseOperationChain";
-import { infer } from "../utils";
 
 describe("testing template engine", () => {
   const typeSchema = typeSchemaBuilder({})
@@ -30,10 +29,10 @@ describe("testing template engine", () => {
       b
         .addOperation({
           key: "slice",
-          args: infer([
+          args: [
             { key: "start", type: "number" },
             { key: "end", type: "number" },
-          ]),
+          ],
           returnType: "string",
           operation: (input, { start, end }) => input.slice(start, end),
         })
@@ -60,7 +59,7 @@ describe("testing template engine", () => {
         })
         .addOperation({
           key: "add",
-          args: infer([{ key: "addend", type: "number" }]),
+          args: [{ key: "addend", type: "number" }],
           returnType: "number",
           operation: (input, { addend }) => input + addend,
         })
@@ -74,7 +73,6 @@ describe("testing template engine", () => {
       })
     )
     .build();
-
   test(templateTestMessage(), () =>
     expect(templateFn("Hallo {{user}}!")({ user: "Max" })).toBe("Hallo Max!")
   );

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const templateBuilder_1 = require("../schemaBuilder/templateBuilder");
 const typeSchemaBuilder_1 = require("../schemaBuilder/typeSchemaBuilder");
-const utils_1 = require("../utils");
 const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
     .addType("string", {
     isDefault: true,
@@ -24,10 +23,10 @@ const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
     .add("string", (b) => b
     .addOperation({
     key: "slice",
-    args: (0, utils_1.infer)([
+    args: [
         { key: "start", type: "number" },
         { key: "end", type: "number" },
-    ]),
+    ],
     returnType: "string",
     operation: (input, { start, end }) => input.slice(start, end),
 })
@@ -52,7 +51,7 @@ const { schema } = (0, templateBuilder_1.templateBuilder)(typeSchema, {})
 })
     .addOperation({
     key: "add",
-    args: (0, utils_1.infer)([{ key: "addend", type: "number" }]),
+    args: [{ key: "addend", type: "number" }],
     returnType: "number",
     operation: (input, { addend }) => input + addend,
 }))

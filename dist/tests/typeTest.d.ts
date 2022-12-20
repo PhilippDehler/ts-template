@@ -35,30 +35,30 @@ declare const schema: {
         slice: {
             key: "slice";
             args: [{
-                key: "start";
-                type: "number";
+                key: string;
+                type: string;
             }, {
-                key: "end";
-                type: "number";
+                key: string;
+                type: string;
             }];
             returnType: "string";
             operation: (input: string, args: {
-                start: number;
+                [x: string]: any;
             } & {
-                end: number;
+                [x: string]: any;
             }) => string;
         };
     } & {
         uppercase: {
             key: "uppercase";
-            args: never[];
+            args: [];
             returnType: "string";
             operation: (input: string, args: {}) => string;
         };
     } & {
         lowercase: {
             key: "lowercase";
-            args: never[];
+            args: [];
             returnType: "string";
             operation: (input: string, args: {}) => string;
         };
@@ -67,7 +67,7 @@ declare const schema: {
     number: {
         square: {
             key: "square";
-            args: never[];
+            args: [];
             returnType: "number";
             operation: (input: number, args: {}) => number;
         };
@@ -75,12 +75,12 @@ declare const schema: {
         add: {
             key: "add";
             args: [{
-                key: "addend";
-                type: "number";
+                key: string;
+                type: string;
             }];
             returnType: "number";
             operation: (input: number, args: {
-                addend: number;
+                [x: string]: any;
             }) => number;
         };
     };
@@ -88,7 +88,7 @@ declare const schema: {
     date: {
         iso: {
             key: "iso";
-            args: never[];
+            args: [];
             returnType: "string";
             operation: (input: Date, args: {}) => string;
         };

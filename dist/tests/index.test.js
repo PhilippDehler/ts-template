@@ -4,7 +4,6 @@ const templateBuilder_1 = require("../schemaBuilder/templateBuilder");
 const typeSchemaBuilder_1 = require("../schemaBuilder/typeSchemaBuilder");
 const parseArguments_1 = require("../templateEngine/parseArguments");
 const parseOperationChain_1 = require("../templateEngine/parseOperationChain");
-const utils_1 = require("../utils");
 describe("testing template engine", () => {
     const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
         .addType("string", {
@@ -29,10 +28,10 @@ describe("testing template engine", () => {
         .add("string", (b) => b
         .addOperation({
         key: "slice",
-        args: (0, utils_1.infer)([
+        args: [
             { key: "start", type: "number" },
             { key: "end", type: "number" },
-        ]),
+        ],
         returnType: "string",
         operation: (input, { start, end }) => input.slice(start, end),
     })
@@ -57,7 +56,7 @@ describe("testing template engine", () => {
     })
         .addOperation({
         key: "add",
-        args: (0, utils_1.infer)([{ key: "addend", type: "number" }]),
+        args: [{ key: "addend", type: "number" }],
         returnType: "number",
         operation: (input, { addend }) => input + addend,
     }))

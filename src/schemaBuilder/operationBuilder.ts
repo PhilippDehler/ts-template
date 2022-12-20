@@ -13,7 +13,7 @@ export type OperationBuilder<
     TReturn extends keyof T
   >(definition: {
     key: Narrow<OperationKey> & string;
-    args: TArgs;
+    args: Narrow<TArgs>;
     returnType: Narrow<TReturn>;
     operation: (
       input: InputType,

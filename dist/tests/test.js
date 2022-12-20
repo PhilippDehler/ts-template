@@ -5035,7 +5035,7 @@
 //   //   })
 //   //     .addOperation({
 //   //       key: "slice",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "start", type: "number" },
 //   //         { key: "end", type: "number" },
 //   //       ]),
@@ -5044,7 +5044,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "replace",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "searchValue", type: "string" },
 //   //         { key: "replaceValue", type: "string" },
 //   //       ]),
@@ -5072,7 +5072,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "startsWith",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "searchString", type: "string" },
 //   //         { key: "position", type: "number" },
 //   //       ]),
@@ -5082,7 +5082,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "endsWith",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "searchString", type: "string" },
 //   //         { key: "position", type: "number" },
 //   //       ]),
@@ -5092,7 +5092,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "includes",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "searchString", type: "string" },
 //   //         { key: "position", type: "number" },
 //   //       ]),
@@ -5102,13 +5102,13 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "repeat",
-//   //       args: infer([{ key: "count", type: "number" }]),
+//   //       args: ([{ key: "count", type: "number" }]),
 //   //       returnType: "string",
 //   //       operation: (_, { count }) => _.repeat(count),
 //   //     })
 //   //     .addOperation({
 //   //       key: "padStart",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "targetLength", type: "number" },
 //   //         { key: "padString", type: "string" },
 //   //       ]),
@@ -5118,7 +5118,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "padEnd",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "targetLength", type: "number" },
 //   //         { key: "padString", type: "string" },
 //   //       ]),
@@ -5128,7 +5128,7 @@
 //   //     })
 //   //     .addOperation({
 //   //       key: "truncate",
-//   //       args: infer([
+//   //       args: ([
 //   //         { key: "length", type: "number" },
 //   //         { key: "end", type: "string" },
 //   //       ]),

@@ -1,5 +1,4 @@
 import { templateBuilder } from "../schemaBuilder/templateBuilder";
-import { infer } from "../utils";
 import { builtInTypes } from "./types";
 
 export const { schema: builtInTemplateSchema } = templateBuilder(
@@ -15,19 +14,19 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
     })
       .addOperation({
         key: "slice",
-        args: infer([
+        args: [
           { key: "start", type: "number" },
           { key: "end", type: "number" },
-        ]),
+        ],
         returnType: "string",
         operation: (_, { start, end }) => _.slice(start, end),
       })
       .addOperation({
         key: "replace",
-        args: infer([
+        args: [
           { key: "searchValue", type: "string" },
           { key: "replaceValue", type: "string" },
-        ]),
+        ],
         returnType: "string",
         operation: (_, { replaceValue, searchValue }) =>
           _.replace(searchValue, replaceValue),
@@ -52,66 +51,66 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "startsWith",
-        args: infer([
+        args: [
           { key: "searchString", type: "string" },
           { key: "position", type: "number" },
-        ]),
+        ],
         returnType: "boolean",
         operation: (_, { searchString, position }) =>
           _.startsWith(searchString, position),
       })
       .addOperation({
         key: "endsWith",
-        args: infer([
+        args: [
           { key: "searchString", type: "string" },
           { key: "position", type: "number" },
-        ]),
+        ],
         returnType: "boolean",
         operation: (_, { searchString, position }) =>
           _.endsWith(searchString, position),
       })
       .addOperation({
         key: "includes",
-        args: infer([
+        args: [
           { key: "searchString", type: "string" },
           { key: "position", type: "number" },
-        ]),
+        ],
         returnType: "boolean",
         operation: (_, { searchString, position }) =>
           _.includes(searchString, position),
       })
       .addOperation({
         key: "repeat",
-        args: infer([{ key: "count", type: "number" }]),
+        args: [{ key: "count", type: "number" }],
         returnType: "string",
         operation: (_, { count }) => _.repeat(count),
       })
       .addOperation({
         key: "padStart",
-        args: infer([
+        args: [
           { key: "targetLength", type: "number" },
           { key: "padString", type: "string" },
-        ]),
+        ],
         returnType: "string",
         operation: (_, { targetLength, padString }) =>
           _.padStart(targetLength, padString),
       })
       .addOperation({
         key: "padEnd",
-        args: infer([
+        args: [
           { key: "targetLength", type: "number" },
           { key: "padString", type: "string" },
-        ]),
+        ],
         returnType: "string",
         operation: (_, { targetLength, padString }) =>
           _.padEnd(targetLength, padString),
       })
       .addOperation({
         key: "truncate",
-        args: infer([
+        args: [
           { key: "length", type: "number" },
           { key: "end", type: "string" },
-        ]),
+        ],
         returnType: "string",
         operation: (_, { length, end }) => {
           if (_.length > length) {
@@ -202,19 +201,19 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "toLocaleDateString",
-        args: infer([{ key: "locales", type: "string" }]),
+        args: [{ key: "locales", type: "string" }],
         returnType: "string",
         operation: (_, { locales }) => _.toLocaleDateString(locales),
       })
       .addOperation({
         key: "toLocaleString",
-        args: infer([{ key: "locales", type: "string" }]),
+        args: [{ key: "locales", type: "string" }],
         returnType: "string",
         operation: (_, { locales }) => _.toLocaleString(locales),
       })
       .addOperation({
         key: "toLocaleTimeString",
-        args: infer([{ key: "locales", type: "string" }]),
+        args: [{ key: "locales", type: "string" }],
         returnType: "string",
         operation: (_, { locales }) => _.toLocaleTimeString(locales),
       })
@@ -346,7 +345,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "mmddyyyy",
-        args: infer([{ key: "separator", type: "string" }]),
+        args: [{ key: "separator", type: "string" }],
         returnType: "string",
         operation: (_, { separator }) =>
           `${
@@ -355,7 +354,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "ddmmyyyy",
-        args: infer([{ key: "separator", type: "string" }]),
+        args: [{ key: "separator", type: "string" }],
         returnType: "string",
         operation: (_, { separator }) =>
           `${_.getDate()}${separator}${
@@ -364,7 +363,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "ddyyyymm",
-        args: infer([{ key: "separator", type: "string" }]),
+        args: [{ key: "separator", type: "string" }],
         returnType: "string",
         operation: (_, { separator }) =>
           `${_.getDate()}${separator}${_.getFullYear()}${separator}${
@@ -373,7 +372,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "yyyyddmm",
-        args: infer([{ key: "separator", type: "string" }]),
+        args: [{ key: "separator", type: "string" }],
         returnType: "string",
         operation: (_, { separator }) =>
           `${_.getFullYear()}${separator}${_.getDate()}${separator}${
@@ -384,25 +383,25 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
   .add("number", (_) =>
     _.addOperation({
       key: "toExponential",
-      args: infer([{ key: "fractionDigits", type: "number" }]),
+      args: [{ key: "fractionDigits", type: "number" }],
       returnType: "string",
       operation: (_, { fractionDigits }) => _.toExponential(fractionDigits),
     })
       .addOperation({
         key: "toFixed",
-        args: infer([{ key: "fractionDigits", type: "number" }]),
+        args: [{ key: "fractionDigits", type: "number" }],
         returnType: "string",
         operation: (_, { fractionDigits }) => _.toFixed(fractionDigits),
       })
       .addOperation({
         key: "toPrecision",
-        args: infer([{ key: "precision", type: "number" }]),
+        args: [{ key: "precision", type: "number" }],
         returnType: "string",
         operation: (_, { precision }) => _.toPrecision(precision),
       })
       .addOperation({
         key: "toString",
-        args: infer([{ key: "radix", type: "number" }]),
+        args: [{ key: "radix", type: "number" }],
         returnType: "string",
         operation: (_, { radix }) => _.toString(radix),
       })
@@ -414,43 +413,43 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "add",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => _ + value,
       })
       .addOperation({
         key: "subtract",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => _ + value,
       })
       .addOperation({
         key: "multiply",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => _ + value,
       })
       .addOperation({
         key: "divide",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => _ + value,
       })
       .addOperation({
         key: "root",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.pow(_, 1 / value),
       })
       .addOperation({
         key: "power",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.pow(_, value),
       })
       .addOperation({
         key: "log",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.log(value) / Math.log(_),
       })
@@ -522,7 +521,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "atan2",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.atan2(_, value),
       })
@@ -564,7 +563,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "hypot",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.hypot(_, value),
       })
@@ -606,7 +605,7 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "imul",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.imul(_, value),
       })
@@ -636,19 +635,19 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       })
       .addOperation({
         key: "max",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.max(_, value),
       })
       .addOperation({
         key: "min",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.min(_, value),
       })
       .addOperation({
         key: "hypot",
-        args: infer([{ key: "value", type: "number" }]),
+        args: [{ key: "value", type: "number" }],
         returnType: "number",
         operation: (_, { value }) => Math.hypot(_, value),
       })
@@ -674,49 +673,49 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
     })
       .addOperation({
         key: "and",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ && value,
       })
       .addOperation({
         key: "or",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ || value,
       })
       .addOperation({
         key: "xor",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ !== value,
       })
       .addOperation({
         key: "nand",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => !(_ && value),
       })
       .addOperation({
         key: "nor",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => !(_ || value),
       })
       .addOperation({
         key: "xnor",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ === value,
       })
       .addOperation({
         key: "equals",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ === value,
       })
       .addOperation({
         key: "notEquals",
-        args: infer([{ key: "value", type: "boolean" }]),
+        args: [{ key: "value", type: "boolean" }],
         returnType: "boolean",
         operation: (_, { value }) => _ !== value,
       })
