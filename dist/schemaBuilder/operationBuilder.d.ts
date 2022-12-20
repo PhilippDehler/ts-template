@@ -1,26 +1,26 @@
+import { ArgDefinition } from "../templateStringValidator/argsValidator";
 import { Narrow } from "../ts-utils/narrow";
 import { TypeDefinitions } from "./typeSchemaBuilder";
-export type OperationBuilder<InputType, T extends TypeDefinitions, TOperation extends {} = {}> = {
+type WithReturnTypeDefault<T extends string, Default extends string> = IsInferredString<T> extends true ? T : Default;
+type IsInferredString<T extends string> = string extends T ? false : T extends string ? true : false;
+export type OperationBuilder<InputType, T extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends {} = {}> = {
     operation: TOperation;
-    addOperation: <OperationKey extends string, TArgs extends {
-        key: string;
-        type: string;
-    }[], TReturn extends keyof T>(definition: {
+    addOperation: <OperationKey extends string, TArgs extends ArgDefinition[], TReturn extends keyof T & string>(definition: {
         key: Narrow<OperationKey> & string;
         args: Narrow<TArgs>;
-        returnType: Narrow<TReturn>;
+        returnType?: Narrow<TReturn>;
         operation: (input: InputType, args: ExtractArgs<TArgs, T>) => ReturnType<T[TReturn]["parseValue"]>;
-    }) => OperationBuilder<InputType, T, TOperation & {
+    }) => OperationBuilder<InputType, T, TypeDefault, TOperation & {
         [K in OperationKey]: {
             key: OperationKey;
             args: TArgs;
-            returnType: TReturn;
+            returnType: WithReturnTypeDefault<TReturn, TypeDefault>;
             operation: (input: InputType, args: ExtractArgs<TArgs, T>) => ReturnType<T[TReturn]["parseValue"]>;
         };
     }>;
     build: () => TOperation;
 };
-export declare function operationBuilder<Input, T extends TypeDefinitions, TOperation extends {} = {}>(operation: TOperation): OperationBuilder<Input, T, TOperation>;
+export declare function operationBuilder<Input, T extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends {} = {}>(operation: TOperation): OperationBuilder<Input, T, TypeDefault, TOperation>;
 type ExtractArgs<T, X extends Record<string, {
     isDefault: boolean;
     validator: (input: unknown) => boolean;

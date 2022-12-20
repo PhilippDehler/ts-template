@@ -11,7 +11,11 @@ type TemplateBuilder<T extends TypeDefinitions, TOperation extends {}> = {
   add: <TP, Key extends keyof T>(
     key: Narrow<Key> & string,
     operationDefinitions: (
-      builder: OperationBuilder<ReturnType<T[Key]["parseValue"]>, T>
+      builder: OperationBuilder<
+        ReturnType<T[Key]["parseValue"]>,
+        T,
+        ExtractDefault<T>["key"]
+      >
     ) => { build: () => TP }
   ) => TemplateBuilder<
     T,
@@ -44,13 +48,14 @@ export function templateBuilder<
     add: (key, operationDefinitions) => {
       const builder = operationBuilder<
         ReturnType<T[typeof key & string]["parseValue"]>,
-        T
+        T,
+        ExtractDefault<T>["key"]
       >({});
       return templateBuilder(input, {
         ...self.operation,
         [key]: {
           ...operationDefinitions(builder).build(),
-          ...(self.operation[key as keyof typeof self.operation] ?? {}),
+          ...(self.operation[key as keyof TOperation] ?? {}),
         },
       }) as any;
     },
@@ -60,7 +65,7 @@ export function templateBuilder<
       const schema = {
         typeDefinition: {
           ...input,
-          DEFAULT: defaultType as ExtractDefault<typeof input>,
+          DEFAULT: defaultType as ExtractDefault<T>,
         },
         ...self.operation,
       };

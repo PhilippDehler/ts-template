@@ -1,20 +1,32 @@
+import { ArgDefinition } from "../templateStringValidator/argsValidator";
 import { Narrow } from "../ts-utils/narrow";
 import { TypeDefinitions } from "./typeSchemaBuilder";
+
+type WithReturnTypeDefault<
+  T extends string,
+  Default extends string
+> = IsInferredString<T> extends true ? T : Default;
+type IsInferredString<T extends string> = string extends T
+  ? false
+  : T extends string
+  ? true
+  : false;
 
 export type OperationBuilder<
   InputType,
   T extends TypeDefinitions,
+  TypeDefault extends keyof TypeDefinitions,
   TOperation extends {} = {}
 > = {
   operation: TOperation;
   addOperation: <
     OperationKey extends string,
-    TArgs extends { key: string; type: string }[],
-    TReturn extends keyof T
+    TArgs extends ArgDefinition[],
+    TReturn extends keyof T & string
   >(definition: {
     key: Narrow<OperationKey> & string;
     args: Narrow<TArgs>;
-    returnType: Narrow<TReturn>;
+    returnType?: Narrow<TReturn>;
     operation: (
       input: InputType,
       args: ExtractArgs<TArgs, T>
@@ -22,11 +34,12 @@ export type OperationBuilder<
   }) => OperationBuilder<
     InputType,
     T,
+    TypeDefault,
     TOperation & {
       [K in OperationKey]: {
         key: OperationKey;
         args: TArgs;
-        returnType: TReturn;
+        returnType: WithReturnTypeDefault<TReturn, TypeDefault>;
         operation: (
           input: InputType,
           args: ExtractArgs<TArgs, T>
@@ -40,9 +53,10 @@ export type OperationBuilder<
 export function operationBuilder<
   Input,
   T extends TypeDefinitions,
+  TypeDefault extends keyof TypeDefinitions,
   TOperation extends {} = {}
 >(operation: TOperation) {
-  const self: OperationBuilder<Input, T, TOperation> = {
+  const self: OperationBuilder<Input, T, TypeDefault, TOperation> = {
     operation,
     addOperation: (definition) => {
       return operationBuilder({
