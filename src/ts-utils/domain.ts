@@ -1,3 +1,5 @@
+import { If, IsNever } from "./utilityTypes";
+
 export type ErrorMsg<Msg extends string> = `[Error:${Msg}]`;
 export type SuggestionMsg<Msg extends string> = `${Msg}`;
 export type NeedsSuggestions<T extends string> = T extends SuggestionString
@@ -12,17 +14,12 @@ export type Maybe<T extends string, Msg extends string = ""> = [T] extends [
   : { value: T; error: never };
 export type ExtendableMaybe = { value: any; error: any };
 
-export type HasError<T extends ExtendableMaybe> = [T["value"]] extends [never]
-  ? true
-  : false;
-
+export type MaybeHasError<T extends ExtendableMaybe> = IsNever<T["value"]>;
 export type FromMaybe<
   T extends ExtendableMaybe,
   OnImpossible = "FROM ERROR: value is never and error is never"
-> = [T["error"]] extends [never]
-  ? [T["value"]] extends [never]
-    ? OnImpossible
-    : T["value"]
-  : [T["value"]] extends [never]
-  ? T["error"]
-  : T["value"];
+> = If<
+  IsNever<T["error"]>,
+  If<IsNever<T["value"]>, OnImpossible, T["value"]>,
+  If<IsNever<T["value"]>, T["error"], T["value"]>
+>;

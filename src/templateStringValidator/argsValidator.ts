@@ -22,12 +22,9 @@ export type ValidateArg<
   TArg extends string,
   TArgDefinition extends ArgDefinition
 > = [TArgDefinition] extends [never]
-  ? Maybe<
-      [TArg] extends [never] ? "" : never,
-      ErrorMsg<`Didn't expect Arg ${TArg}`>
-    >
+  ? Maybe<If<IsNever<TArg>, "">, ErrorMsg<`Didn't expect Arg ${TArg}`>>
   : Maybe<
-      [TArg] extends [never] ? TArg : NeverOnEmptyOrSuggestion<TArg>,
+      If<IsNever<TArg>, never, NeverOnEmptyOrSuggestion<TArg>>,
       ErrorMsg<`Expected Type:${TArgDefinition["type"] & string}`>
     >;
 

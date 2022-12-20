@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.infer = exports.typeSchemaBuilder = exports.templateBuilder = void 0;
+exports.infer = exports.typeSchemaBuilder = exports.templateBuilder = exports.builtInTypes = exports.builtInTemplateSchema = void 0;
+var templateSchema_1 = require("./builtIns/templateSchema");
+Object.defineProperty(exports, "builtInTemplateSchema", { enumerable: true, get: function () { return templateSchema_1.builtInTemplateSchema; } });
+var types_1 = require("./builtIns/types");
+Object.defineProperty(exports, "builtInTypes", { enumerable: true, get: function () { return types_1.builtInTypes; } });
 var templateBuilder_1 = require("./schemaBuilder/templateBuilder");
 Object.defineProperty(exports, "templateBuilder", { enumerable: true, get: function () { return templateBuilder_1.templateBuilder; } });
 var typeSchemaBuilder_1 = require("./schemaBuilder/typeSchemaBuilder");

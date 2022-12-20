@@ -2,7 +2,7 @@ import {
   ErrorMsg,
   ExtendableMaybe,
   FromMaybe,
-  HasError,
+  MaybeHasError,
 } from "../ts-utils/domain";
 
 export type RebuildTemplateString<
@@ -13,7 +13,7 @@ export type RebuildTemplateString<
   infer Head extends ExtendableMaybe,
   ...infer Tail extends ExtendableMaybe[]
 ]
-  ? HasError<Head> extends true
+  ? MaybeHasError<Head> extends true
     ? Verbosity extends 0
       ? `${FromMaybe<Head> & string}`
       : Verbosity extends 1

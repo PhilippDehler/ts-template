@@ -6,11 +6,7 @@ export interface ArgDefinition<Type extends string = string> {
     type: Type;
 }
 type NeverOnEmptyOrSuggestion<T extends string> = T extends "" | SuggestionString ? never : T;
-export type ValidateArg<TArg extends string, TArgDefinition extends ArgDefinition> = [TArgDefinition] extends [never] ? Maybe<[
-    TArg
-] extends [never] ? "" : never, ErrorMsg<`Didn't expect Arg ${TArg}`>> : Maybe<[
-    TArg
-] extends [never] ? TArg : NeverOnEmptyOrSuggestion<TArg>, ErrorMsg<`Expected Type:${TArgDefinition["type"] & string}`>>;
+export type ValidateArg<TArg extends string, TArgDefinition extends ArgDefinition> = [TArgDefinition] extends [never] ? Maybe<If<IsNever<TArg>, "">, ErrorMsg<`Didn't expect Arg ${TArg}`>> : Maybe<If<IsNever<TArg>, never, NeverOnEmptyOrSuggestion<TArg>>, ErrorMsg<`Expected Type:${TArgDefinition["type"] & string}`>>;
 export type ValidateArgs<Args extends string[], TArgDefinitions extends ArgDefinition[], TAgg extends ExtendableMaybe[] = []> = TArgDefinitions extends [
     infer FirstArgDef extends ArgDefinition,
     ...infer RestArgDefs extends ArgDefinition[]
