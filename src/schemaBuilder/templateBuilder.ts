@@ -19,7 +19,7 @@ import {
 
 type TemplateBuilder<
   T extends TypeDefinitions,
-  TOperation extends Record<string, OperationDefinition>,
+  TOperation extends Record<string, Record<string, OperationDefinition>>,
   Verbose extends VerbosityLevel
 > = {
   operation: TOperation;
@@ -59,7 +59,7 @@ type TemplateBuilder<
 export function templateBuilder<
   TypeSchema extends TypeDefinitions,
   Verbose extends VerbosityLevel = 3,
-  TOperation extends Record<string, OperationDefinition> = {}
+  TOperation extends Record<string, Record<string, OperationDefinition>> = {}
 >(input: TypeSchema, operation: TOperation, verbose?: Verbose) {
   const typeDefaultKey = getTypeSchemaDefaultKey(input);
   const self: TemplateBuilder<TypeSchema, TOperation, Verbose> = {
@@ -92,21 +92,48 @@ export function templateBuilder<
       );
     },
     build() {
-      const defaultType = getTypeSchemaDefault(input);
-      const schema = {
-        typeDefinition: {
-          ...input,
-          DEFAULT: defaultType,
-        },
-        ...self.operation,
-      };
-      const templateFn: TemplateFn<typeof schema, Verbose> = (template) =>
-        createTemplateFn(template as any, schema);
-      return {
-        templateFn,
-        schema,
-      };
+      return buildTemplateFn(input, self.operation, verbose ?? 3);
     },
   };
   return self;
+}
+
+export function buildTemplateFn<
+  T extends TypeDefinitions,
+  TOperation extends Record<string, Record<string, OperationDefinition>>,
+  Verbose extends VerbosityLevel
+>(
+  input: T,
+  operations: TOperation,
+  //@ts-expect-error
+  verbose: Verbose
+): {
+  schema: {
+    typeDefinition: {
+      DEFAULT: ExtractDefaultType<T>;
+    } & T;
+  } & TOperation;
+  templateFn: TemplateFn<
+    {
+      typeDefinition: {
+        DEFAULT: ExtractDefaultType<T>;
+      } & T;
+    } & TOperation,
+    Verbose
+  >;
+} {
+  const defaultType = getTypeSchemaDefault(input);
+  const schema = {
+    typeDefinition: {
+      ...input,
+      DEFAULT: defaultType,
+    },
+    ...operations,
+  };
+  const templateFn: TemplateFn<typeof schema, Verbose> = (template) =>
+    createTemplateFn(template as any, schema);
+  return {
+    templateFn,
+    schema,
+  };
 }

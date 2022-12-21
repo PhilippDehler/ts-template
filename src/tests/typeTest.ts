@@ -32,7 +32,6 @@ const typeSchema = typeSchemaBuilder({})
     parseValue: (value: string) => new Date(value),
   })
   .build();
-
 const { schema } = templateBuilder(typeSchema, {}, 1)
   .add("string", (b) =>
     b

@@ -93,7 +93,7 @@ export type ValidateTemplateValue<
       >
     ];
 
-export type Val<
+export type Validate<
   Input extends string,
   TSchema extends {
     typeDefinition: TypeDefinitions;

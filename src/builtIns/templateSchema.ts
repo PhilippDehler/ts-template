@@ -1,7 +1,6 @@
 import { templateBuilder } from "../schemaBuilder/templateBuilder";
 import { infer } from "../utils";
 import { builtInTypes } from "./types";
-
 export const { schema: builtInTemplateSchema } = templateBuilder(
   builtInTypes,
   {}
@@ -10,7 +9,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
     _.addOperation({
       key: "trim",
       args: [],
-      returnType: "string",
       operation: (_) => _.trim(),
     })
       .addOperation({
@@ -19,7 +17,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
           { key: "start", type: "number" },
           { key: "end", type: "number" },
         ],
-        returnType: "string",
         operation: (_, { start, end }) => _.slice(start, end),
       })
       .addOperation({
@@ -28,26 +25,22 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
           { key: "searchValue", type: "string" },
           { key: "replaceValue", type: "string" },
         ],
-        returnType: "string",
         operation: (_, { replaceValue, searchValue }) =>
           _.replace(searchValue, replaceValue),
       })
       .addOperation({
         key: "toLower",
         args: [],
-        returnType: "string",
         operation: (_) => _.toLowerCase(),
       })
       .addOperation({
         key: "toUpper",
         args: [],
-        returnType: "string",
         operation: (_) => _.toUpperCase(),
       })
       .addOperation({
         key: "capitalize",
         args: [],
-        returnType: "string",
         operation: (_) => _.charAt(0).toUpperCase() + _.slice(1),
       })
       .addOperation({
@@ -83,7 +76,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "repeat",
         args: infer([{ key: "count", type: "number" }]),
-        returnType: "string",
         operation: (_, { count }) => _.repeat(count),
       })
       .addOperation({
@@ -92,7 +84,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
           { key: "targetLength", type: "number" },
           { key: "padString", type: "string" },
         ],
-        returnType: "string",
         operation: (_, { targetLength, padString }) =>
           _.padStart(targetLength, padString),
       })
@@ -102,7 +93,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
           { key: "targetLength", type: "number" },
           { key: "padString", type: "string" },
         ],
-        returnType: "string",
         operation: (_, { targetLength, padString }) =>
           _.padEnd(targetLength, padString),
       })
@@ -112,7 +102,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
           { key: "length", type: "number" },
           { key: "end", type: "string" },
         ],
-        returnType: "string",
         operation: (_, { length, end }) => {
           if (_.length > length) {
             return _.slice(0, length) + end;
@@ -141,25 +130,21 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "urlEncode",
         args: [],
-        returnType: "string",
         operation: (_) => encodeURIComponent(_),
       })
       .addOperation({
         key: "urlDecode",
         args: [],
-        returnType: "string",
         operation: (_) => decodeURIComponent(_),
       })
       .addOperation({
         key: "base64Encode",
         args: [],
-        returnType: "string",
         operation: (_) => Buffer.from(_).toString("base64"),
       })
       .addOperation({
         key: "base64Decode",
         args: [],
-        returnType: "string",
         operation: (_) => Buffer.from(_, "base64").toString("ascii"),
       })
       .addOperation({
@@ -185,55 +170,46 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "toDateString",
         args: [],
-        returnType: "string",
         operation: (_) => _.toDateString(),
       })
       .addOperation({
         key: "toISOString",
         args: [],
-        returnType: "string",
         operation: (_) => _.toISOString(),
       })
       .addOperation({
         key: "toJSON",
         args: [],
-        returnType: "string",
         operation: (_) => _.toJSON(),
       })
       .addOperation({
         key: "toLocaleDateString",
         args: infer([{ key: "locales", type: "string" }]),
-        returnType: "string",
         operation: (_, { locales }) => _.toLocaleDateString(locales),
       })
       .addOperation({
         key: "toLocaleString",
         args: infer([{ key: "locales", type: "string" }]),
-        returnType: "string",
         operation: (_, { locales }) => _.toLocaleString(locales),
       })
       .addOperation({
         key: "toLocaleTimeString",
         args: infer([{ key: "locales", type: "string" }]),
-        returnType: "string",
         operation: (_, { locales }) => _.toLocaleTimeString(locales),
       })
       .addOperation({
         key: "toString",
         args: [],
-        returnType: "string",
         operation: (_) => _.toString(),
       })
       .addOperation({
         key: "toTimeString",
         args: [],
-        returnType: "string",
         operation: (_) => _.toTimeString(),
       })
       .addOperation({
         key: "toUTCString",
         args: [],
-        returnType: "string",
         operation: (_) => _.toUTCString(),
       })
       .addOperation({
@@ -347,7 +323,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "mmddyyyy",
         args: infer([{ key: "separator", type: "string" }]),
-        returnType: "string",
         operation: (_, { separator }) =>
           `${
             _.getMonth() + 1
@@ -356,7 +331,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "ddmmyyyy",
         args: infer([{ key: "separator", type: "string" }]),
-        returnType: "string",
         operation: (_, { separator }) =>
           `${_.getDate()}${separator}${
             _.getMonth() + 1
@@ -365,7 +339,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "ddyyyymm",
         args: infer([{ key: "separator", type: "string" }]),
-        returnType: "string",
         operation: (_, { separator }) =>
           `${_.getDate()}${separator}${_.getFullYear()}${separator}${
             _.getMonth() + 1
@@ -374,7 +347,6 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
       .addOperation({
         key: "yyyyddmm",
         args: infer([{ key: "separator", type: "string" }]),
-        returnType: "string",
         operation: (_, { separator }) =>
           `${_.getFullYear()}${separator}${_.getDate()}${separator}${
             _.getMonth() + 1
@@ -385,25 +357,21 @@ export const { schema: builtInTemplateSchema } = templateBuilder(
     _.addOperation({
       key: "toExponential",
       args: infer([{ key: "fractionDigits", type: "number" }]),
-      returnType: "string",
       operation: (_, { fractionDigits }) => _.toExponential(fractionDigits),
     })
       .addOperation({
         key: "toFixed",
         args: infer([{ key: "fractionDigits", type: "number" }]),
-        returnType: "string",
         operation: (_, { fractionDigits }) => _.toFixed(fractionDigits),
       })
       .addOperation({
         key: "toPrecision",
         args: infer([{ key: "precision", type: "number" }]),
-        returnType: "string",
         operation: (_, { precision }) => _.toPrecision(precision),
       })
       .addOperation({
         key: "toString",
         args: infer([{ key: "radix", type: "number" }]),
-        returnType: "string",
         operation: (_, { radix }) => _.toString(radix),
       })
       .addOperation({

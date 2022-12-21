@@ -42,8 +42,8 @@ export declare const builtInTemplateSchema: {
         trim: {
             key: "trim";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         slice: {
@@ -55,12 +55,12 @@ export declare const builtInTemplateSchema: {
                 key: string;
                 type: string;
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 [x: string]: any;
             } & {
                 [x: string]: any;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         replace: {
@@ -72,33 +72,33 @@ export declare const builtInTemplateSchema: {
                 key: string;
                 type: string;
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 [x: string]: any;
             } & {
                 [x: string]: any;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toLower: {
             key: "toLower";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         toUpper: {
             key: "toUpper";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         capitalize: {
             key: "capitalize";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         startsWith: {
@@ -158,10 +158,10 @@ export declare const builtInTemplateSchema: {
                 key: "count";
                 type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 count: number;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         padStart: {
@@ -173,12 +173,12 @@ export declare const builtInTemplateSchema: {
                 key: string;
                 type: string;
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 [x: string]: any;
             } & {
                 [x: string]: any;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         padEnd: {
@@ -190,12 +190,12 @@ export declare const builtInTemplateSchema: {
                 key: string;
                 type: string;
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 [x: string]: any;
             } & {
                 [x: string]: any;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         truncate: {
@@ -207,12 +207,12 @@ export declare const builtInTemplateSchema: {
                 key: string;
                 type: string;
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: string, args: {
                 [x: string]: any;
             } & {
                 [x: string]: any;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toDate: {
@@ -239,29 +239,29 @@ export declare const builtInTemplateSchema: {
         urlEncode: {
             key: "urlEncode";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         urlDecode: {
             key: "urlDecode";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         base64Encode: {
             key: "base64Encode";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         base64Decode: {
             key: "base64Decode";
             args: [];
-            returnType: "string";
-            operation: (input: string, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: string, args: {}) => string | number | boolean | Date;
         };
     } & {
         length: {
@@ -290,22 +290,22 @@ export declare const builtInTemplateSchema: {
         toDateString: {
             key: "toDateString";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         toISOString: {
             key: "toISOString";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         toJSON: {
             key: "toJSON";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         toLocaleDateString: {
@@ -314,10 +314,10 @@ export declare const builtInTemplateSchema: {
                 key: "locales";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 locales: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toLocaleString: {
@@ -326,10 +326,10 @@ export declare const builtInTemplateSchema: {
                 key: "locales";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 locales: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toLocaleTimeString: {
@@ -338,31 +338,31 @@ export declare const builtInTemplateSchema: {
                 key: "locales";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 locales: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toString: {
             key: "toString";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         toTimeString: {
             key: "toTimeString";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         toUTCString: {
             key: "toUTCString";
             args: [];
-            returnType: "string";
-            operation: (input: Date, args: {}) => string;
+            returnType: "string" | "number" | "boolean" | "date";
+            operation: (input: Date, args: {}) => string | number | boolean | Date;
         };
     } & {
         valueOf: {
@@ -497,10 +497,10 @@ export declare const builtInTemplateSchema: {
                 key: "separator";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 separator: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         ddmmyyyy: {
@@ -509,10 +509,10 @@ export declare const builtInTemplateSchema: {
                 key: "separator";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 separator: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         ddyyyymm: {
@@ -521,10 +521,10 @@ export declare const builtInTemplateSchema: {
                 key: "separator";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 separator: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         yyyyddmm: {
@@ -533,10 +533,10 @@ export declare const builtInTemplateSchema: {
                 key: "separator";
                 type: "string";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: Date, args: {
                 separator: string;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     };
 } & {
@@ -547,10 +547,10 @@ export declare const builtInTemplateSchema: {
                 key: "fractionDigits";
                 type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: number, args: {
                 fractionDigits: number;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toFixed: {
@@ -559,10 +559,10 @@ export declare const builtInTemplateSchema: {
                 key: "fractionDigits";
                 type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: number, args: {
                 fractionDigits: number;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toPrecision: {
@@ -571,10 +571,10 @@ export declare const builtInTemplateSchema: {
                 key: "precision";
                 type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: number, args: {
                 precision: number;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         toString: {
@@ -583,10 +583,10 @@ export declare const builtInTemplateSchema: {
                 key: "radix";
                 type: "number";
             }];
-            returnType: "string";
+            returnType: "string" | "number" | "boolean" | "date";
             operation: (input: number, args: {
                 radix: number;
-            }) => string;
+            }) => string | number | boolean | Date;
         };
     } & {
         valueOf: {

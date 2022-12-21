@@ -5,7 +5,7 @@ import { TypeDefinitions } from "./typeSchemaBuilder";
 export interface OperationDefinition {
   args: ArgDefinition[];
   returnType: string;
-  operation: (input: string, args: any) => string;
+  operation: (input: any, args: any) => any;
   key: string;
 }
 

@@ -53,7 +53,7 @@ export type ValidateTemplateValue<T extends string, TSchema extends {
 ] : [
     Maybe<never, ErrorMsg<"ValidateTemplateValue couldn't extract all necessarry operation infromation">>
 ];
-export type Val<Input extends string, TSchema extends {
+export type Validate<Input extends string, TSchema extends {
     typeDefinition: TypeDefinitions;
 }, Verbose extends VerbosityLevel> = RebuildTemplateString<ValidateTemplate<Input, TSchema>, Verbose>;
 export type ValidateTemplate<Input extends string, TSchema extends {

@@ -6,7 +6,7 @@ import {
 } from "../templateStringValidator/rebuildTemplateString";
 import {
   ExtractOperationInformations,
-  Val,
+  Validate,
   ValidateTemplate,
 } from "../templateStringValidator/templateValidator";
 import { Narrow } from "../ts-utils/narrow";
@@ -23,7 +23,7 @@ export type TemplateFn<
   Verbose extends VerbosityLevel
 > = <
   Template extends Validated,
-  Validated = Val<Narrow<Template> & string, TSchema, Verbose>
+  Validated = Validate<Narrow<Template> & string, TSchema, Verbose>
 >(
   template: Narrow<Template>
 ) => ReturnType<typeof createTemplateFn<Template & string, TSchema, Verbose>>;

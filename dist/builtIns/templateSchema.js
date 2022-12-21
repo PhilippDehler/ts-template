@@ -8,7 +8,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
     .add("string", (_) => _.addOperation({
     key: "trim",
     args: [],
-    returnType: "string",
     operation: (_) => _.trim(),
 })
     .addOperation({
@@ -17,7 +16,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
         { key: "start", type: "number" },
         { key: "end", type: "number" },
     ],
-    returnType: "string",
     operation: (_, { start, end }) => _.slice(start, end),
 })
     .addOperation({
@@ -26,25 +24,21 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
         { key: "searchValue", type: "string" },
         { key: "replaceValue", type: "string" },
     ],
-    returnType: "string",
     operation: (_, { replaceValue, searchValue }) => _.replace(searchValue, replaceValue),
 })
     .addOperation({
     key: "toLower",
     args: [],
-    returnType: "string",
     operation: (_) => _.toLowerCase(),
 })
     .addOperation({
     key: "toUpper",
     args: [],
-    returnType: "string",
     operation: (_) => _.toUpperCase(),
 })
     .addOperation({
     key: "capitalize",
     args: [],
-    returnType: "string",
     operation: (_) => _.charAt(0).toUpperCase() + _.slice(1),
 })
     .addOperation({
@@ -77,7 +71,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
     .addOperation({
     key: "repeat",
     args: (0, utils_1.infer)([{ key: "count", type: "number" }]),
-    returnType: "string",
     operation: (_, { count }) => _.repeat(count),
 })
     .addOperation({
@@ -86,7 +79,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
         { key: "targetLength", type: "number" },
         { key: "padString", type: "string" },
     ],
-    returnType: "string",
     operation: (_, { targetLength, padString }) => _.padStart(targetLength, padString),
 })
     .addOperation({
@@ -95,7 +87,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
         { key: "targetLength", type: "number" },
         { key: "padString", type: "string" },
     ],
-    returnType: "string",
     operation: (_, { targetLength, padString }) => _.padEnd(targetLength, padString),
 })
     .addOperation({
@@ -104,7 +95,6 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
         { key: "length", type: "number" },
         { key: "end", type: "string" },
     ],
-    returnType: "string",
     operation: (_, { length, end }) => {
         if (_.length > length) {
             return _.slice(0, length) + end;
@@ -133,25 +123,21 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
     .addOperation({
     key: "urlEncode",
     args: [],
-    returnType: "string",
     operation: (_) => encodeURIComponent(_),
 })
     .addOperation({
     key: "urlDecode",
     args: [],
-    returnType: "string",
     operation: (_) => decodeURIComponent(_),
 })
     .addOperation({
     key: "base64Encode",
     args: [],
-    returnType: "string",
     operation: (_) => Buffer.from(_).toString("base64"),
 })
     .addOperation({
     key: "base64Decode",
     args: [],
-    returnType: "string",
     operation: (_) => Buffer.from(_, "base64").toString("ascii"),
 })
     .addOperation({
@@ -175,55 +161,46 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
     .addOperation({
     key: "toDateString",
     args: [],
-    returnType: "string",
     operation: (_) => _.toDateString(),
 })
     .addOperation({
     key: "toISOString",
     args: [],
-    returnType: "string",
     operation: (_) => _.toISOString(),
 })
     .addOperation({
     key: "toJSON",
     args: [],
-    returnType: "string",
     operation: (_) => _.toJSON(),
 })
     .addOperation({
     key: "toLocaleDateString",
     args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
-    returnType: "string",
     operation: (_, { locales }) => _.toLocaleDateString(locales),
 })
     .addOperation({
     key: "toLocaleString",
     args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
-    returnType: "string",
     operation: (_, { locales }) => _.toLocaleString(locales),
 })
     .addOperation({
     key: "toLocaleTimeString",
     args: (0, utils_1.infer)([{ key: "locales", type: "string" }]),
-    returnType: "string",
     operation: (_, { locales }) => _.toLocaleTimeString(locales),
 })
     .addOperation({
     key: "toString",
     args: [],
-    returnType: "string",
     operation: (_) => _.toString(),
 })
     .addOperation({
     key: "toTimeString",
     args: [],
-    returnType: "string",
     operation: (_) => _.toTimeString(),
 })
     .addOperation({
     key: "toUTCString",
     args: [],
-    returnType: "string",
     operation: (_) => _.toUTCString(),
 })
     .addOperation({
@@ -337,49 +314,41 @@ exports.builtInTemplateSchema = (0, templateBuilder_1.templateBuilder)(types_1.b
     .addOperation({
     key: "mmddyyyy",
     args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
-    returnType: "string",
     operation: (_, { separator }) => `${_.getMonth() + 1}${separator}${_.getDate()}${separator}${_.getFullYear()}`,
 })
     .addOperation({
     key: "ddmmyyyy",
     args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
-    returnType: "string",
     operation: (_, { separator }) => `${_.getDate()}${separator}${_.getMonth() + 1}${separator}${_.getFullYear()}`,
 })
     .addOperation({
     key: "ddyyyymm",
     args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
-    returnType: "string",
     operation: (_, { separator }) => `${_.getDate()}${separator}${_.getFullYear()}${separator}${_.getMonth() + 1}`,
 })
     .addOperation({
     key: "yyyyddmm",
     args: (0, utils_1.infer)([{ key: "separator", type: "string" }]),
-    returnType: "string",
     operation: (_, { separator }) => `${_.getFullYear()}${separator}${_.getDate()}${separator}${_.getMonth() + 1}`,
 }))
     .add("number", (_) => _.addOperation({
     key: "toExponential",
     args: (0, utils_1.infer)([{ key: "fractionDigits", type: "number" }]),
-    returnType: "string",
     operation: (_, { fractionDigits }) => _.toExponential(fractionDigits),
 })
     .addOperation({
     key: "toFixed",
     args: (0, utils_1.infer)([{ key: "fractionDigits", type: "number" }]),
-    returnType: "string",
     operation: (_, { fractionDigits }) => _.toFixed(fractionDigits),
 })
     .addOperation({
     key: "toPrecision",
     args: (0, utils_1.infer)([{ key: "precision", type: "number" }]),
-    returnType: "string",
     operation: (_, { precision }) => _.toPrecision(precision),
 })
     .addOperation({
     key: "toString",
     args: (0, utils_1.infer)([{ key: "radix", type: "number" }]),
-    returnType: "string",
     operation: (_, { radix }) => _.toString(radix),
 })
     .addOperation({
