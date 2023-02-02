@@ -106,23 +106,27 @@ type Params<
     > extends {
       key: infer Key extends string;
       type: infer Type extends string;
+      isOptional: infer IsOptional extends boolean;
     }
-    ? Params<Rest, TSchema, MergeParams<P, Key, Type, TSchema>>
+    ? Params<Rest, TSchema, MergeParams<P, Key, Type, IsOptional, TSchema>>
     : Params<Rest, TSchema, P>
   : P;
 
 type MergeParams<
   P extends Record<string, any>,
-  Key extends string,
+  TemplateKey extends string,
   Type extends string,
+  isOptional extends boolean,
   TSchema extends { typeDefinition: TypeDefinitions }
-> = (Key extends `?${infer TemplateKey}`
+> = (isOptional extends true
   ? {
       [K in TemplateKey]?: ReturnType<
         TSchema["typeDefinition"][Type]["parseValue"]
       >;
     }
   : {
-      [K in Key]: ReturnType<TSchema["typeDefinition"][Type]["parseValue"]>;
+      [K in TemplateKey]: ReturnType<
+        TSchema["typeDefinition"][Type]["parseValue"]
+      >;
     }) &
   P;

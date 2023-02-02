@@ -13,11 +13,12 @@ type WithReturnTypeDefault<
   T extends string,
   Default extends string
 > = IsInferredString<T> extends true ? T : Default;
+
 type IsInferredString<T extends string> = string extends T
-  ? false
-  : T extends string
   ? true
-  : false;
+  : T extends string
+  ? false
+  : true;
 
 export type OperationBuilder<
   InputType,

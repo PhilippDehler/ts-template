@@ -8,7 +8,7 @@ export interface OperationDefinition {
     key: string;
 }
 type WithReturnTypeDefault<T extends string, Default extends string> = IsInferredString<T> extends true ? T : Default;
-type IsInferredString<T extends string> = string extends T ? false : T extends string ? true : false;
+type IsInferredString<T extends string> = string extends T ? true : T extends string ? false : true;
 export type OperationBuilder<InputType, T extends TypeDefinitions, TypeDefault extends keyof TypeDefinitions, TOperation extends {} = {}> = {
     operation: TOperation;
     addOperation: <OperationKey extends string, TArgs extends ArgDefinition[], TReturn extends keyof T & string>(definition: {

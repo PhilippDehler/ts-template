@@ -5,6 +5,7 @@ import { StringKeys } from "../ts-utils/object";
 import { HasPartialMatch, Split } from "../ts-utils/string";
 import { If } from "../ts-utils/utilityTypes";
 import { ArgDefinition, ValidateArgs } from "./argsValidator";
+import { RebuildTemplateString } from "./rebuildTemplateString";
 type BrutForceOperationReturnType<TSchema extends {
     typeDefinition: TypeDefinitions;
 }, Type, Operation> = Type extends keyof TSchema ? Operation extends keyof TSchema[Type] ? "returnType" extends keyof TSchema[Type][Operation] ? TSchema[Type][Operation]["returnType"] extends StringKeys<TSchema> ? TSchema[Type][Operation]["returnType"] extends keyof TSchema ? TSchema[Type][Operation]["returnType"] & keyof TSchema : never : never : never : never : never;
@@ -48,7 +49,7 @@ export type ValidateOperations<Operation extends string[], TSchema extends {
 }, InitalType extends keyof TSchema, TAgg extends ExtendableMaybe[] = []> = Operation extends [
     infer FirstOperation extends string,
     ...infer Rest extends string[]
-] ? TSchema[InitalType] extends OperationLookUp ? ValidateOperations<Rest, TSchema, OperationReturnType<TSchema, InitalType, ValidateOperation<FirstOperation, TSchema[InitalType]>>, [
+] ? TSchema[InitalType] extends OperationLookUp ? ValidateOperations<Rest, TSchema, OperationReturnType<TSchema, InitalType, RebuildTemplateString<ValidateOperation<FirstOperation, TSchema[InitalType]>>>, [
     ...TAgg,
     ...ValidateOperation<FirstOperation, TSchema[InitalType]>,
     ...If<IsEmptyArray<Rest>, Rest, [Maybe<"|">]>

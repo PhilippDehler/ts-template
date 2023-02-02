@@ -2,6 +2,7 @@ import { templateBuilder } from "../schemaBuilder/templateBuilder";
 import { typeSchemaBuilder } from "../schemaBuilder/typeSchemaBuilder";
 import { parseArguments } from "../templateEngine/parseArguments";
 import { parseOperationChain } from "../templateEngine/parseOperationChain";
+import { infer } from "../utils";
 
 describe("testing template engine", () => {
   const typeSchema = typeSchemaBuilder({})
@@ -27,20 +28,20 @@ describe("testing template engine", () => {
       b
         .addOperation({
           key: "slice",
-          args: [
+          args: infer([
             { key: "start", type: "number" },
             { key: "end", type: "number" },
-          ],
+          ]),
           operation: (input, { start, end }) => input.slice(start, end),
         })
         .addOperation({
           key: "uppercase",
-          args: [],
+          args: infer([]),
           operation: (input) => input.toUpperCase(),
         })
         .addOperation({
           key: "lowercase",
-          args: [],
+          args: infer([]),
           operation: (input) => input.toLowerCase(),
         })
     )
@@ -48,13 +49,13 @@ describe("testing template engine", () => {
       b
         .addOperation({
           key: "square",
-          args: [],
+          args: infer([]),
           returnType: "number",
           operation: (input) => input * input,
         })
         .addOperation({
           key: "add",
-          args: [{ key: "addend", type: "number" }],
+          args: infer([{ key: "addend", type: "number" }]),
           returnType: "number",
           operation: (input, { addend }) => input + addend,
         })
@@ -62,7 +63,7 @@ describe("testing template engine", () => {
     .add("date", (b) =>
       b.addOperation({
         key: "iso",
-        args: [],
+        args: infer([]),
         operation: (input) => input.toISOString(),
       })
     )

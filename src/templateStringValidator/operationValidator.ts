@@ -13,6 +13,7 @@ import { HasPartialMatch, Split } from "../ts-utils/string";
 import { If } from "../ts-utils/utilityTypes";
 
 import { ArgDefinition, ValidateArgs } from "./argsValidator";
+import { RebuildTemplateString } from "./rebuildTemplateString";
 
 type BrutForceOperationReturnType<
   TSchema extends {
@@ -137,7 +138,9 @@ export type ValidateOperations<
         OperationReturnType<
           TSchema,
           InitalType,
-          ValidateOperation<FirstOperation, TSchema[InitalType]>
+          RebuildTemplateString<
+            ValidateOperation<FirstOperation, TSchema[InitalType]>
+          >
         >,
         [
           ...TAgg,

@@ -4,6 +4,7 @@ const templateBuilder_1 = require("../schemaBuilder/templateBuilder");
 const typeSchemaBuilder_1 = require("../schemaBuilder/typeSchemaBuilder");
 const parseArguments_1 = require("../templateEngine/parseArguments");
 const parseOperationChain_1 = require("../templateEngine/parseOperationChain");
+const utils_1 = require("../utils");
 describe("testing template engine", () => {
     const typeSchema = (0, typeSchemaBuilder_1.typeSchemaBuilder)({})
         .addType("string", {
@@ -26,38 +27,38 @@ describe("testing template engine", () => {
         .add("string", (b) => b
         .addOperation({
         key: "slice",
-        args: [
+        args: (0, utils_1.infer)([
             { key: "start", type: "number" },
             { key: "end", type: "number" },
-        ],
+        ]),
         operation: (input, { start, end }) => input.slice(start, end),
     })
         .addOperation({
         key: "uppercase",
-        args: [],
+        args: (0, utils_1.infer)([]),
         operation: (input) => input.toUpperCase(),
     })
         .addOperation({
         key: "lowercase",
-        args: [],
+        args: (0, utils_1.infer)([]),
         operation: (input) => input.toLowerCase(),
     }))
         .add("number", (b) => b
         .addOperation({
         key: "square",
-        args: [],
+        args: (0, utils_1.infer)([]),
         returnType: "number",
         operation: (input) => input * input,
     })
         .addOperation({
         key: "add",
-        args: [{ key: "addend", type: "number" }],
+        args: (0, utils_1.infer)([{ key: "addend", type: "number" }]),
         returnType: "number",
         operation: (input, { addend }) => input + addend,
     }))
         .add("date", (b) => b.addOperation({
         key: "iso",
-        args: [],
+        args: (0, utils_1.infer)([]),
         operation: (input) => input.toISOString(),
     }))
         .build();

@@ -20,15 +20,17 @@ export type ExtractOperationInformations<
   DefaultType
 > = T extends `${infer Key}#${infer Type}|${infer Operations}`
   ? {
-      key: Key;
+      key: Key extends `?${infer K}` ? K : Key;
       type: Type;
+      isOptional: Key extends `?${string}` ? true : false;
       operations: Operations;
       hasOperations: true;
       hasType: true;
     }
   : T extends `${infer Key}#${infer Type}`
   ? {
-      key: Key;
+      key: Key extends `?${infer K}` ? K : Key;
+      isOptional: Key extends `?${string}` ? true : false;
       type: Type;
       operations: "";
       hasOperations: false;
@@ -36,14 +38,16 @@ export type ExtractOperationInformations<
     }
   : T extends `${infer Key}|${infer Operations}`
   ? {
-      key: Key;
+      key: Key extends `?${infer K}` ? K : Key;
+      isOptional: Key extends `?${string}` ? true : false;
       type: DefaultType;
       operations: Operations;
       hasOperations: true;
       hasType: false;
     }
   : {
-      key: T;
+      key: T extends `?${infer K}` ? K : T;
+      isOptional: T extends `?${string}` ? true : false;
       type: DefaultType;
       operations: "";
       hasOperations: false;
@@ -61,11 +65,13 @@ export type ValidateTemplateValue<
 > extends {
   key: infer Key extends string;
   type: infer Type extends string;
+  isOptional: infer IsOptional extends boolean;
   operations: infer Operations extends string;
   hasType: infer HasType extends boolean;
   hasOperations: infer HasOperations extends boolean;
 }
   ? [
+      If<IsOptional, Maybe<"?">, Maybe<"">>,
       ValidateKey<Key>,
       ...If<
         HasType,

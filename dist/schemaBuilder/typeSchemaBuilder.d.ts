@@ -24,11 +24,7 @@ export type TypeSchemaBuilder<T extends TypeDefinitions> = {
     build: () => T;
 };
 export declare function typeSchemaBuilder<T extends TypeDefinitions>(types: T): TypeSchemaBuilder<T>;
-export type ExtractDefaultType<T extends Record<string, {
-    isDefault: boolean;
-    validator: (input: unknown) => boolean;
-    parseValue: (value: string) => unknown;
-}>> = {
+export type ExtractDefaultType<T extends Record<string, TypeDefinition>> = {
     [K in keyof T]: T[K]["isDefault"] extends true ? T[K] & {
         key: K;
     } : never;

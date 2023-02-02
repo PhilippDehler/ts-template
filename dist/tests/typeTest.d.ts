@@ -41,7 +41,7 @@ declare const schema: {
                 key: "end";
                 type: "number";
             }];
-            returnType: "string" | "number" | "date";
+            returnType: "string";
             operation: (input: string, args: {
                 start: number;
             } & {
@@ -52,14 +52,14 @@ declare const schema: {
         uppercase: {
             key: "uppercase";
             args: [];
-            returnType: "string" | "number" | "date";
+            returnType: "string";
             operation: (input: string, args: {}) => string | number | Date;
         };
     } & {
         lowercase: {
             key: "lowercase";
             args: [];
-            returnType: "string" | "number" | "date";
+            returnType: "string";
             operation: (input: string, args: {}) => string | number | Date;
         };
     };
@@ -68,7 +68,7 @@ declare const schema: {
         square: {
             key: "square";
             args: [];
-            returnType: "number";
+            returnType: "string";
             operation: (input: number, args: {}) => number;
         };
     } & {
@@ -78,7 +78,7 @@ declare const schema: {
                 key: "addend";
                 type: "number";
             }];
-            returnType: "number";
+            returnType: "string";
             operation: (input: number, args: {
                 addend: number;
             }) => number;
@@ -89,7 +89,7 @@ declare const schema: {
         iso: {
             key: "iso";
             args: [];
-            returnType: "string" | "number" | "date";
+            returnType: "string";
             operation: (input: Date, args: {}) => string | number | Date;
         };
     };
